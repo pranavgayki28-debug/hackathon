@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COSA - Events</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #000;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .main-container {
+            position: relative;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0015 0%, #1a0033 50%, #0f001f 100%);
+            overflow-x: hidden;
+        }
+
+        .stars-layer {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: moveStar linear infinite;
+        }
+
+        @keyframes moveStar {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) translateX(var(--x-move));
+                opacity: 0;
+            }
+        }
+
+        .wave-layer {
+            position: fixed;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(255, 20, 147, 0.15) 0%, transparent 50%);
+            animation: rotateWaves 30s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotateWaves {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .grid-layer {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(138, 43, 226, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(138, 43, 226, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .nebula {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: float-nebula 20s infinite ease-in-out;
+            z-index: 0;
+        }
+
+        @keyframes float-nebula {
+            0% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(100px, -80px) scale(1.2); }
+            50% { transform: translate(-80px, 100px) scale(0.8); }
+            75% { transform: translate(120px, 50px) scale(1.1); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+
+        /* Header Navigation */
+        .header-nav {
+            position: relative;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 80px;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 0, 30, 0.6);
+            border-bottom: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .logo-container:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-ring {
+            width: 60px;
+            height: 60px;
+            border: 3px solid #8A2BE2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: rotate-ring 10s linear infinite;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
+        }
+
+        @keyframes rotate-ring {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .logo-inner {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #8A2BE2, #FF1493);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 20px;
+            color: white;
+        }
+
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(138, 43, 226, 0.8);
+        }
+
+        .main-nav {
+            display: flex;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .main-nav a {
+            font-family: 'Poppins', sans-serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+            padding: 8px 0;
+            transition: all 0.4s;
+        }
+
+        .main-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #8A2BE2, #FF1493);
+            transform: translateX(-50%);
+            transition: width 0.4s;
+        }
+
+        .main-nav a:hover {
+            color: #FF1493;
+            text-shadow: 0 0 15px rgba(255, 20, 147, 0.6);
+        }
+
+        .main-nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Sidebars */
+        .left-sidebar, .right-sidebar {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: rgba(10, 0, 30, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 25px 18px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .left-sidebar {
+            left: 0;
+            border-radius: 0 20px 20px 0;
+            border-left: none;
+        }
+
+        .right-sidebar {
+            right: 0;
+            border-radius: 20px 0 0 20px;
+            border-right: none;
+        }
+
+        .sidebar-icon {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.3), rgba(75, 0, 130, 0.3));
+            border: 2px solid rgba(138, 43, 226, 0.5);
+            border-radius: 12px;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.4s;
+            position: relative;
+        }
+
+        .sidebar-icon:hover {
+            background: linear-gradient(135deg, #8A2BE2, #FF1493);
+            border-color: white;
+            transform: scale(1.15);
+            box-shadow: 0 5px 20px rgba(138, 43, 226, 0.6);
+        }
+
+        .left-sidebar .sidebar-icon:hover {
+            transform: translateX(8px) scale(1.15);
+        }
+
+        .right-sidebar .sidebar-icon:hover {
+            transform: translateX(-8px) scale(1.15);
+        }
+
+        .sidebar-label {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.95), rgba(75, 0, 130, 0.95));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 5px 20px rgba(138, 43, 226, 0.6);
+            z-index: 1000;
+        }
+
+        .left-sidebar .sidebar-label {
+            left: 70px;
+            top: 50%;
+            transform: translateY(-50%) translateX(-10px);
+        }
+
+        .right-sidebar .sidebar-label {
+            right: 70px;
+            top: 50%;
+            transform: translateY(-50%) translateX(10px);
+        }
+
+        .sidebar-icon:hover .sidebar-label {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+        }
+
+        /* Events Content */
+        .events-container {
+            position: relative;
+            z-index: 10;
+            padding: 60px 100px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .events-section {
+            margin-bottom: 100px;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 48px;
+            font-weight: 900;
+            color: white;
+            text-align: center;
+            margin-bottom: 60px;
+            text-shadow: 0 0 30px rgba(138, 43, 226, 0.8);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 50px;
+            justify-items: center;
+        }
+
+        .event-card {
+            position: relative;
+            width: 320px;
+            height: 420px;
+            border-radius: 25px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 10px 40px rgba(0, 0, 0, 0.5),
+                0 0 20px rgba(138, 43, 226, 0.3);
+        }
+
+        .event-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #8A2BE2, #FF1493, #8A2BE2);
+            border-radius: 25px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.6s;
+            animation: rotateBorder 3s linear infinite;
+        }
+
+        @keyframes rotateBorder {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .event-card:hover::before {
+            opacity: 1;
+        }
+
+        .event-card:hover {
+            transform: translateY(-20px) scale(1.05);
+            box-shadow: 
+                0 20px 60px rgba(138, 43, 226, 0.6),
+                0 0 40px rgba(255, 20, 147, 0.4);
+        }
+
+        .event-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s;
+        }
+
+        .event-card:hover .event-image {
+            transform: scale(1.1);
+        }
+
+        .event-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, transparent 100%);
+            padding: 30px 25px;
+            transition: all 0.6s;
+        }
+
+        .event-card:hover .event-overlay {
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.98) 0%, rgba(138, 43, 226, 0.3) 100%);
+        }
+
+        .event-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            text-align: center;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(138, 43, 226, 0.8);
+            transition: all 0.4s;
+        }
+
+        .event-card:hover .event-name {
+            color: #FF1493;
+            text-shadow: 0 0 30px rgba(255, 20, 147, 1);
+            transform: scale(1.1);
+        }
+
+        .event-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(138, 43, 226, 0.6) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.6s;
+            pointer-events: none;
+        }
+
+        .event-card:hover .event-glow {
+            opacity: 1;
+            animation: pulseGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        .event-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.6s;
+        }
+
+        .event-card:hover .event-particles {
+            opacity: 1;
+        }
+
+        .event-particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            animation: floatEventParticle 3s ease-in-out infinite;
+        }
+
+        @keyframes floatEventParticle {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-150px) translateX(var(--x-offset));
+                opacity: 0;
+            }
+        }
+
+        .event-particle:nth-child(1) {
+            left: 20%;
+            bottom: 0;
+            --x-offset: 20px;
+            animation-delay: 0s;
+        }
+
+        .event-particle:nth-child(2) {
+            left: 50%;
+            bottom: 0;
+            --x-offset: -25px;
+            animation-delay: 0.5s;
+        }
+
+        .event-particle:nth-child(3) {
+            left: 80%;
+            bottom: 0;
+            --x-offset: 30px;
+            animation-delay: 1s;
+        }
+
+        .event-particle:nth-child(4) {
+            left: 35%;
+            bottom: 0;
+            --x-offset: -15px;
+            animation-delay: 1.5s;
+        }
+
+        .event-particle:nth-child(5) {
+            left: 65%;
+            bottom: 0;
+            --x-offset: 40px;
+            animation-delay: 2s;
+        }
+        .year-badge {
+            display: inline-block;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: #FF1493;
+            background: rgba(138, 43, 226, 0.2);
+            padding: 10px 25px;
+            border-radius: 30px;
+            border: 2px solid rgba(138, 43, 226, 0.5);
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+            animation: glow-pulse 2s infinite;
+              justify-content: center;
+            align-items: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .events-container {
+                padding: 40px 60px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-nav {
+                padding: 20px 30px;
+                flex-direction: column;
+                gap: 20px;
+            }
+            .main-nav {
+                gap: 30px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .main-nav a {
+                font-size: 16px;
+            }
+            .events-container {
+                padding: 30px 20px;
+            }
+            .section-title {
+                font-size: 36px;
+            }
+            .events-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .left-sidebar, .right-sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="css/mobile.css">
+    <div class="main-container">
+        <!-- Animated Background -->
+        <div class="stars-layer" id="starsLayer"></div>
+        <div class="wave-layer"></div>
+        <div class="grid-layer"></div>
+        
+        <!-- Nebula Effects -->
+        <div class="nebula" style="width: 400px; height: 400px; background: radial-gradient(circle, rgba(138, 43, 226, 0.4), transparent); top: 10%; left: 10%;"></div>
+        <div class="nebula" style="width: 500px; height: 500px; background: radial-gradient(circle, rgba(255, 20, 147, 0.3), transparent); top: 50%; right: 10%;"></div>
+        <div class="nebula" style="width: 350px; height: 350px; background: radial-gradient(circle, rgba(75, 0, 130, 0.4), transparent); bottom: 10%; left: 50%;"></div>
+
+        <!-- Header Navigation -->
+        <nav class="header-nav">
+            <div class="logo-container">
+                <div class="logo-ring">
+                    <div class="logo-inner">C</div>
+                </div>
+                <div class="logo-text">COSA</div>
+            </div>
+            <div class="main-nav">
+                 <a href="event.html">EVENTS</a>
+                <a href="winners.html">WINNERS</a>
+               
+            </div>
+        </nav>
+
+        <!-- Left Sidebar -->
+        <div class="left-sidebar">
+            <div class="sidebar-icon"  onclick="window.location.href='index.html'">
+                <i class="fas fa-home"></i>
+                <span class="sidebar-label">Home</span>
+            </div>
+        
+            <div class="sidebar-icon" onclick="window.location.href='gallery.html'">
+                <i class="fas fa-trophy"></i>
+                <span class="sidebar-label">Gallery</span>
+            </div>
+            <div class="sidebar-icon" onclick="window.location.href='about.html'">
+                <i class="fas fa-info-circle"></i>
+                <span class="sidebar-label">About Us</span>
+            </div>
+            <div class="sidebar-icon" onclick="window.location.href='team.html'">
+                <i class="fas fa-users"></i>
+                <span class="sidebar-label">Team</span>
+            </div>
+        </div>
+
+      <!-- Right Sidebar -->
+        <div class="right-sidebar">
+    <a href="https://www.youtube.com/@Cosa_gpy" target="_blank">
+    <div class="sidebar-icon">
+        <i class="fab fa-youtube"></i>
+        <span class="sidebar-label">YouTube</span>
+    </div>
+</a>     <a href="https://www.instagram.com/computer_wale_gpy?igsh=cW9vc3Y5NDZtNDY1" target="_blank">
+    <div class="sidebar-icon">
+        <i class="fab fa-instagram"></i>
+        <span class="sidebar-label">Instagram</span>
+    </div>
+</a>
+       
+           <a href="https://www.facebook.com/share/1AAisLXPTC/" target="_blank">
+    <div class="sidebar-icon">
+        <i class="fab fa-facebook"></i>
+        <span class="sidebar-label">Facebook</span>
+    </div>
+</a>
+           <a href="https://gpyavatmal.ac.in/gpy/" target="_blank">
+    <div class="sidebar-icon">
+        <i class="fas fa-globe"></i>
+        <span class="sidebar-label">Website </span>
+    </div>
+</a>
+        </div>
+        <!-- Events Content -->
+        <div class="events-container">
+            <!-- Main Events -->
+            <div class="events-section">
+                <h2 class="section-title">Events</h2>
+               <center>  <div class="year-badge">15 January 2026</div></center><br>
+                <div class="events-grid">
+                    <div class="event-card">
+                        <img src="img/prob.jpeg"  class="event-image"  onclick="window.location.href='information.html'">
+                        <div class="event-glow"></div>
+                        <div class="event-particles">
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                        </div>
+                        <div class="event-overlay">
+                            <h3 class="event-name">Problem Analysis</h3>
+                        </div>
+                    </div>
+
+                    <div class="event-card">
+                        <img src="img/role.jpeg"  class="event-image"  onclick="window.location.href='done1/roleploay.html'">
+                        <div class="event-glow"></div>
+                        <div class="event-particles">
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                        </div>
+                        <div class="event-overlay">
+                            <h3 class="event-name">Role Play</h3>
+                        </div>
+                    </div>
+
+                    <div class="event-card">
+                        <img src="img/visual.jpeg" alt="Envision" class="event-image"  onclick="window.location.href='done1/visualvoyage.html'">
+                        <div class="event-glow"></div>
+                        <div class="event-particles">
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                        </div>
+                        <div class="event-overlay">
+                            <h3 class="event-name">Visual Voyage</h3>
+                        </div>
+                    </div>
+
+                  
+
+                 
+                </div>
+            </div>
+
+            <!-- Synergy Sphere -->
+            <div class="events-section">
+              <center>  <div class="year-badge">16 January 2026</div></center><br>
+                <div class="events-grid">
+                   
+
+                    <div class="event-card">
+                        <img src="img/blindfold.jpeg" alt="Archquest" class="event-image"  onclick="window.location.href='done1/blindfold.html'">
+                        <div class="event-glow"></div>
+                        <div class="event-particles">
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                        </div>
+                        <div class="event-overlay">
+                            <h3 class="event-name">Blindfold</h3>
+                        </div>
+                    </div>
+
+                    <div class="event-card">
+                        <img src="img/hackathon.jpeg" alt="Scrutinizing Humane" class="event-image"  onclick="window.location.href='done1/hackathon.html'">
+                        <div class="event-glow"></div>
+                        <div class="event-particles">
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                        </div>
+                        <div class="event-overlay">
+                            <h3 class="event-name">Hackathon</h3>
+                        </div>
+                    </div>
+                    
+                    <div class="event-card">
+                        <img src="img/treasurehunt.jpeg" alt="Robo Sumo" class="event-image"  onclick="window.location.href='done1/tech.html'">
+                        <div class="event-glow"></div>
+                        <div class="event-particles">
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                        </div>
+                        <div class="event-overlay">
+                            <h3 class="event-name">Tech Treasure Hunt</h3>
+                        </div>
+                    </div>
+
+                    
+                </div>
+            </div>
+
+              <div class="events-section">
+              <center>  <div class="year-badge">17 January 2026</div></center><br>
+                <div class="events-grid">
+                    <div class="event-card">
+                        <img src="img/ict.jpeg" alt="Robo Sumo" class="event-image"  onclick="window.location.href='done1/ict.html'">
+                        <div class="event-glow"></div>
+                        <div class="event-particles">
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                            <div class="event-particle"></div>
+                        </div>
+                        <div class="event-overlay">
+                            <h3 class="event-name">ICT</h3>
+                        </div>
+                    </div>
+
+                 
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        // Generate Moving Stars
+        function createStars() {
+            const starsLayer = document.getElementById('starsLayer');
+            const numberOfStars = 150;
+
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * -50 + '%';
+                
+                const xMove = (Math.random() - 0.5) * 200;
+                star.style.setProperty('--x-move', xMove + 'px');
+                
+                const duration = Math.random() * 15 + 10;
+                star.style.animationDuration = duration + 's';
+                star.style.animationDelay = Math.random() * 5 + 's';
+                
+                starsLayer.appendChild(star);
+            }
+        }
+
+        // Add entrance animation to event cards
+        function initializeEventCards() {
+            const cards = document.querySelectorAll('.event-card');
+            
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(50px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        }
+
+        // Initialize
+        createStars();
+        
+        // Wait for images to load then animate
+        window.addEventListener('load', () => {
+            initializeEventCards();
+        });
+    </script>
+</body>
+</html>

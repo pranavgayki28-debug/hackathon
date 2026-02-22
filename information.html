@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COSA- Esport</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #000;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .main-container {
+            position: relative;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0015 0%, #1a0033 50%, #0f001f 100%);
+            overflow-x: hidden;
+        }
+
+        .stars-layer {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: moveStar linear infinite;
+        }
+
+        @keyframes moveStar {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) translateX(var(--x-move));
+                opacity: 0;
+            }
+        }
+
+        .wave-layer {
+            position: fixed;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(255, 20, 147, 0.15) 0%, transparent 50%);
+            animation: rotateWaves 30s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotateWaves {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .grid-layer {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(138, 43, 226, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(138, 43, 226, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .nebula {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: float-nebula 20s infinite ease-in-out;
+            z-index: 0;
+        }
+
+        @keyframes float-nebula {
+            0% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(100px, -80px) scale(1.2); }
+            50% { transform: translate(-80px, 100px) scale(0.8); }
+            75% { transform: translate(120px, 50px) scale(1.1); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+
+        /* Header Navigation */
+        .header-nav {
+            position: relative;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 80px;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 0, 30, 0.6);
+            border-bottom: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .logo-container:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-ring {
+            width: 60px;
+            height: 60px;
+            border: 3px solid #8A2BE2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: rotate-ring 10s linear infinite;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
+        }
+
+        @keyframes rotate-ring {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .logo-inner {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #8A2BE2, #FF1493);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 20px;
+            color: white;
+        }
+
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(138, 43, 226, 0.8);
+        }
+
+        .main-nav {
+            display: flex;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .main-nav a {
+            font-family: 'Poppins', sans-serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+            padding: 8px 0;
+            transition: all 0.4s;
+        }
+
+        .main-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #8A2BE2, #FF1493);
+            transform: translateX(-50%);
+            transition: width 0.4s;
+        }
+
+        .main-nav a:hover {
+            color: #FF1493;
+            text-shadow: 0 0 15px rgba(255, 20, 147, 0.6);
+        }
+
+        .main-nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Sidebars */
+        .left-sidebar, .right-sidebar {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: rgba(10, 0, 30, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 25px 18px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .left-sidebar {
+            left: 0;
+            border-radius: 0 20px 20px 0;
+            border-left: none;
+        }
+
+        .right-sidebar {
+            right: 0;
+            border-radius: 20px 0 0 20px;
+            border-right: none;
+        }
+
+        .sidebar-icon {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.3), rgba(75, 0, 130, 0.3));
+            border: 2px solid rgba(138, 43, 226, 0.5);
+            border-radius: 12px;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.4s;
+            position: relative;
+        }
+
+        .sidebar-icon:hover {
+            background: linear-gradient(135deg, #8A2BE2, #FF1493);
+            border-color: white;
+            transform: scale(1.15);
+            box-shadow: 0 5px 20px rgba(138, 43, 226, 0.6);
+        }
+
+        .left-sidebar .sidebar-icon:hover {
+            transform: translateX(8px) scale(1.15);
+        }
+
+        .right-sidebar .sidebar-icon:hover {
+            transform: translateX(-8px) scale(1.15);
+        }
+
+        .sidebar-label {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.95), rgba(75, 0, 130, 0.95));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 5px 20px rgba(138, 43, 226, 0.6);
+            z-index: 1000;
+        }
+
+        .left-sidebar .sidebar-label {
+            left: 70px;
+            top: 50%;
+            transform: translateY(-50%) translateX(-10px);
+        }
+
+        .right-sidebar .sidebar-label {
+            right: 70px;
+            top: 50%;
+            transform: translateY(-50%) translateX(10px);
+        }
+
+        .sidebar-icon:hover .sidebar-label {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+        }
+
+        /* Content */
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            padding: 40px 100px;
+            gap: 40px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .left-section {
+            flex: 0 0 400px;
+        }
+
+        .right-section {
+            flex: 1;
+        }
+
+        /* Event Poster */
+        .event-poster {
+            position: relative;
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 3px solid rgba(138, 43, 226, 0.5);
+            box-shadow: 0 0 40px rgba(138, 43, 226, 0.4);
+            margin-bottom: 30px;
+            transition: all 0.4s;
+        }
+
+        .event-poster:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 60px rgba(138, 43, 226, 0.6);
+        }
+
+        .event-poster img {
+            width: 100%;
+            display: block;
+        }
+
+        /* Collaboration */
+        .collaboration {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .collab-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: #8A2BE2;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+        }
+
+        .collab-logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+            background: rgba(138, 43, 226, 0.1);
+            border: 2px solid rgba(138, 43, 226, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .collab-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .collab-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            color: #8A2BE2;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 15px;
+        }
+
+        /* Register Button */
+        .register-button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #8A2BE2, #FF1493);
+            border: none;
+            border-radius: 15px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.4s;
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.4);
+            margin-bottom: 20px;
+        }
+
+        .register-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(138, 43, 226, 0.6);
+        }
+
+        /* Team Info */
+        .team-info {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .info-box {
+            flex: 1;
+            background: rgba(138, 43, 226, 0.1);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .info-label {
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 8px;
+        }
+
+        .info-value {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+        }
+
+        /* Event Title */
+        .event-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 64px;
+            font-weight: 900;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 30px rgba(138, 43, 226, 0.8);
+        }
+
+        .event-tagline {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 40px;
+            letter-spacing: 1px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 50px;
+            border-bottom: 2px solid rgba(138, 43, 226, 0.3);
+            margin-bottom: 40px;
+        }
+
+        .tab {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 15px 0;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tab.active {
+            color: #8A2BE2;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #8A2BE2, #FF1493);
+        }
+
+        /* Content Section */
+        .content-section {
+            margin-bottom: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.3), rgba(75, 0, 130, 0.3));
+            border: 2px solid rgba(138, 43, 226, 0.5);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8A2BE2;
+            font-size: 20px;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .section-content {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Domain Tags */
+        .domain-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .domain-tag-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: #8A2BE2;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .domain-tag {
+            padding: 10px 20px;
+            background: rgba(138, 43, 226, 0.2);
+            border: 1px solid rgba(138, 43, 226, 0.4);
+            border-radius: 25px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .domain-tag:hover {
+            background: rgba(138, 43, 226, 0.4);
+            border-color: #8A2BE2;
+            transform: scale(1.05);
+        }
+
+        /* Prize Pool */
+        .prize-pool {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(75, 0, 130, 0.2));
+            border: 2px solid rgba(138, 43, 226, 0.4);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .prize-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .prize-icon {
+            color: #FFD700;
+            font-size: 28px;
+        }
+
+        .prize-label {
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .prize-amount {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 48px;
+            font-weight: 900;
+            color: #FFD700;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+        }
+
+        .prize-note {
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .info-card {
+            background: rgba(138, 43, 226, 0.1);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .info-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .info-card-icon {
+            color: #8A2BE2;
+            font-size: 24px;
+        }
+
+        .info-card-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-card-content {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* FAQs */
+        .faqs {
+            margin-top: 60px;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Round Cards */
+        .round-card {
+            background: rgba(138, 43, 226, 0.1);
+            border: 2px solid rgba(138, 43, 226, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+        }
+
+        .round-card:hover {
+            border-color: rgba(138, 43, 226, 0.5);
+            transform: translateX(5px);
+        }
+
+        .round-header {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 20px;
+        }
+
+        .round-number {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #8A2BE2, #FF1493);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            color: white;
+            box-shadow: 0 5px 20px rgba(138, 43, 226, 0.4);
+        }
+
+        .round-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .round-subtitle {
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .round-content {
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .round-content p {
+            margin-bottom: 15px;
+        }
+
+        .round-content strong {
+            color: #8A2BE2;
+        }
+
+        .round-content ul {
+            margin-left: 20px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+
+        .round-content li {
+            margin-bottom: 8px;
+        }
+
+        /* Rules Section */
+        .rules-section {
+            background: rgba(138, 43, 226, 0.05);
+            border-left: 4px solid #8A2BE2;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .rules-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .rules-title i {
+            color: #8A2BE2;
+        }
+
+        .rules-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .rules-list li {
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .rules-list li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: #8A2BE2;
+            font-size: 18px;
+        }
+
+        /* Contact Grid */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .contact-card {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(75, 0, 130, 0.1));
+            border: 2px solid rgba(138, 43, 226, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .contact-card:hover {
+            border-color: #8A2BE2;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.3);
+        }
+
+        .contact-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #8A2BE2, #FF1493);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 30px;
+            color: white;
+        }
+
+        .contact-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .contact-role {
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 20px;
+        }
+
+        .contact-details p {
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .contact-details i {
+            color: #8A2BE2;
+        }
+
+        /* Venue Section */
+        .venue-section {
+            margin-bottom: 40px;
+        }
+
+        .venue-card {
+            background: rgba(138, 43, 226, 0.1);
+            border: 2px solid rgba(138, 43, 226, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .venue-card h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .venue-card p {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 8px;
+        }
+
+        .venue-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .venue-btn {
+            flex: 1;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.3), rgba(75, 0, 130, 0.3));
+            border: 2px solid rgba(138, 43, 226, 0.5);
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .venue-btn:hover {
+            background: linear-gradient(135deg, #8A2BE2, #FF1493);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(138, 43, 226, 0.4);
+        }
+
+        /* Social Section */
+        .social-section {
+            margin-bottom: 40px;
+        }
+
+        .social-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .social-link {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px 25px;
+            background: rgba(138, 43, 226, 0.2);
+            border: 2px solid rgba(138, 43, 226, 0.4);
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .social-link:hover {
+            background: rgba(138, 43, 226, 0.4);
+            border-color: #8A2BE2;
+            transform: translateY(-3px);
+        }
+
+        /* FAQs */
+        .faqs {
+            margin-top: 60px;
+        }
+
+        .faq-item {
+            background: rgba(138, 43, 226, 0.05);
+            border: 1px solid rgba(138, 43, 226, 0.2);
+            border-radius: 12px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .faq-item:hover {
+            border-color: rgba(138, 43, 226, 0.4);
+        }
+
+        .faq-question {
+            padding: 20px 25px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .faq-question:hover {
+            background: rgba(138, 43, 226, 0.1);
+        }
+
+        .faq-icon {
+            color: #8A2BE2;
+            transition: transform 0.3s;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+        }
+
+        .faq-answer-content {
+            padding: 0 25px 20px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .content-wrapper {
+                padding: 40px 60px;
+                flex-direction: column;
+            }
+            .left-section {
+                flex: 1;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-nav {
+                padding: 20px 30px;
+                flex-direction: column;
+                gap: 20px;
+            }
+            .main-nav {
+                gap: 30px;
+            }
+            .content-wrapper {
+                padding: 30px 20px;
+            }
+            .event-title {
+                font-size: 42px;
+            }
+            .tabs {
+                gap: 20px;
+                overflow-x: auto;
+            }
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            .left-sidebar, .right-sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body><meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="../css/mobile.css">
+    <div class="main-container">
+        <!-- Animated Background -->
+        <div class="stars-layer" id="starsLayer"></div>
+        <div class="wave-layer"></div>
+        <div class="grid-layer"></div>
+        
+        <!-- Nebula Effects -->
+        <div class="nebula" style="width: 400px; height: 400px; background: radial-gradient(circle, rgba(138, 43, 226, 0.4), transparent); top: 10%; left: 10%;"></div>
+        <div class="nebula" style="width: 500px; height: 500px; background: radial-gradient(circle, rgba(255, 20, 147, 0.3), transparent); top: 50%; right: 10%;"></div>
+        <div class="nebula" style="width: 350px; height: 350px; background: radial-gradient(circle, rgba(75, 0, 130, 0.4), transparent); bottom: 10%; left: 50%;"></div>
+
+        <!-- Header Navigation -->
+        <nav class="header-nav">
+            <div class="logo-container">
+                <div class="logo-ring">
+                    <div class="logo-inner">C</div>
+                </div>
+                <div class="logo-text">COSA</div>
+            </div>
+            <div class="main-nav">
+                <a href="../event.html">EVENTS</a>
+                <a href="../winners.html">WORKSHOPS</a>
+                
+            </div>
+        </nav>
+
+        <!-- Left Sidebar -->
+         <div class="left-sidebar">
+            <div class="sidebar-icon" onclick="window.location.href='../index.html'">
+                <i class="fas fa-home"></i>
+                <span class="sidebar-label">Home</span>
+            </div>
+       
+            <div class="sidebar-icon" onclick="window.location.href='../gallery.html'">
+                <i class="fas fa-trophy"></i>
+                <span class="sidebar-label">Gallery</span>
+            </div>
+            <div class="sidebar-icon" onclick="window.location.href='../about.html'">
+                <i class="fas fa-info-circle"></i>
+                <span class="sidebar-label">About Us</span>
+            </div>
+            <div class="sidebar-icon" onclick="window.location.href='../team.html'">
+                <i class="fas fa-users"></i>
+                <span class="sidebar-label">Team</span>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="right-sidebar">
+            <div class="sidebar-icon">
+                <i class="fab fa-youtube"></i>
+                <span class="sidebar-label">YouTube</span>
+            </div>
+            <div class="sidebar-icon">
+                <i class="fab fa-instagram"></i>
+                <span class="sidebar-label">Instagram</span>
+            </div>
+         
+            <div class="sidebar-icon">
+                <i class="fab fa-facebook"></i>
+                <span class="sidebar-label">Facebook</span>
+            </div>
+            <div class="sidebar-icon">
+                <i class="fas fa-globe"></i>
+                <span class="sidebar-label">Website</span>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-wrapper">
+            <!-- Left Section -->
+            <div class="left-section">
+                <!-- Event Poster -->
+                <div class="event-poster">
+                    <img src="https://picsum.photos/400/500?random=1" alt="Hackathon Poster">
+                </div>
+
+                <!-- Collaboration -->
+              
+
+                <!-- Register Button -->
+                <button class="register-button"  onclick="window.location.href='form.html'">
+                    <i class="fas fa-arrow-right"></i> REGISTER
+                </button>
+
+                <!-- Team Info -->
+                <div class="team-info">
+                    <div class="info-box">
+                        <div class="info-label"><i class="fas fa-users"></i><h3> Team Size:4 Person only</h3></div>
+                    </div>
+                    <div class="info-box">
+                        <div class="info-label">Entry Fee</div>
+                        <div class="info-value">₹30 / Person</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Section -->
+            <div class="right-section">
+                <!-- Event Title -->
+                <h1 class="event-title">ESPORT </h1>
+                <p class="event-tagline">Complete Missions. Earn XP. Build the Future.</p>
+
+                <!-- Tabs -->
+                <div class="tabs">
+                    <div class="tab active" data-tab="about">
+                        <i class="fas fa-info-circle"></i> ABOUT
+                    </div>
+                   
+                    <div class="tab" data-tab="rulebook">
+                        <i class="fas fa-book"></i> RULE BOOK
+                    </div>
+                    <div class="tab" data-tab="contact">
+                        <i class="fas fa-phone"></i> CONTACT
+                    </div>
+                </div>
+
+                <!-- Tab Content Container -->
+                <div id="tabContent">
+                    <!-- About Content -->
+                    <div class="tab-content active" data-content="about">
+                        <div class="content-section">
+                            <div class="section-header">
+                                <div class="section-icon">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <h2 class="section-title">About</h2>
+                            </div>
+                            <p class="section-content">
+                      The E-Sports Tournament 2026 is a competitive gaming event organized for students to showcase their gaming skills, teamwork, strategy, and quick decision-making abilities.
+The tournament focuses on promoting healthy competition, coordination, and digital sportsmanship through the popular battle-royale game Free Fire.
+                            </p>
+                        </div>
+
+                        <!-- Active Domains -->
+                        <!-- <div class="content-section">
+                            <div class="domain-tag-title">ACTIVE DOMAINS</div>
+                            <div class="domain-tags">
+                                <div class="domain-tag">AI/ML</div>
+                                <div class="domain-tag">Web & App Dev</div>
+                                <div class="domain-tag">IoT</div>
+                                <div class="domain-tag">HealthTech</div>
+                                <div class="domain-tag">FinTech</div>
+                                <div class="domain-tag">EdTech</div>
+                                <div class="domain-tag">Cybersecurity</div>
+                                <div class="domain-tag">Blockchain & Web3</div>
+                                <div class="domain-tag">Sustainability</div>
+                                <div class="domain-tag">Space Technology</div>
+                            </div>
+                        </div> -->
+
+                        <!-- Prize Pool -->
+                        <div class="prize-pool">
+                            <div class="prize-header">
+                                <div class="prize-icon"><i class="fas fa-trophy"></i></div>
+                                <div class="prize-label">Prize Pool</div>
+                            </div>
+                            <div class="prize-amount">Upto ₹70,000</div>
+                            <div class="prize-note">Includes cash prizes, certificates and goodies</div>
+                        </div>
+
+                        <!-- Info Grid -->
+                        <div class="info-grid">
+                            <div class="info-card">
+                                <div class="info-card-header">
+                                    <div class="info-card-icon"><i class="far fa-clock"></i></div>
+                                    <div class="info-card-title">Date and Time</div>
+                                </div>
+                                <div class="info-card-content">15 January 2026 <br>  01:00</div>
+                            </div>
+                            <div class="info-card">
+                                <div class="info-card-header">
+                                    <div class="info-card-icon"><i class="fas fa-map-marker-alt"></i></div>
+                                    <div class="info-card-title">Venue</div>
+                                </div>
+                                <div class="info-card-content">	G004
+</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rounds Content -->
+                    <div class="tab-content" data-content="rounds">
+                        <div class="content-section">
+                            <div class="section-header">
+                                <div class="section-icon">
+                                    <i class="fas fa-clipboard-list"></i>
+                                </div>
+                                <h2 class="section-title">Competition Rounds</h2>
+                            </div>
+                        </div>
+
+                        <!-- Round 1 -->
+                        <div class="round-card">
+                            <div class="round-header">
+                                <div class="round-number">01</div>
+                                <div class="round-info">
+                                    <h3 class="round-title">MCQ Rounds</h3>
+                                    <p class="round-subtitle"></p>
+                                </div>
+                            </div>
+                            <div class="round-content">
+                              <h3>The objective of the MCQ round is to evaluate participants’ conceptual clarity in SQL and identify eligible candidates for advanced rounds by measuring their accuracy, basic problem-solving ability, and time management skills.</h3>
+                                <p><strong>Time Limit:</strong> <b>10 minutes</b></p>
+                              
+                           
+                            </div>
+                        </div>
+
+                        <!-- Round 2 -->
+                        <div class="round-card">
+                            <div class="round-header">
+                                <div class="round-number">02</div>
+                                <div class="round-info">
+                                    <h3 class="round-title"> Query Writing</h3>
+                                    <p class="round-subtitle"></p>
+                                </div>
+                            </div>
+                            <div class="round-content">
+                                <h3>The objective of the Query Writing round is to assess hands-on SQL skills, logical thinking, and the ability to translate given requirements into accurate executable SQL queries within a limited time.</h3>
+                          
+                                <p><strong>Time Limit:</strong> 20 minutes </p>
+                            </div>
+                        </div>
+
+                        <!-- Round 3 -->
+                        <div class="round-card">
+                            <div class="round-header">
+                                <div class="round-number">03</div>
+                                <div class="round-info">
+                                    <h3 class="round-title">Debug Query</h3>
+                                    <p class="round-subtitle"></p>
+                                </div>
+                            </div>
+                            <div class="round-content">
+                            <h3>The goal of the Debug Query round is to test participants’ ability to identify, analyze, and correct errors in SQL queries, demonstrating deep understanding of SQL syntax, logic, and query execution.</h3>
+                               
+                                <p><strong>Time Limit:</strong> 10 minutes</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rule Book Content -->
+                    <div class="tab-content" data-content="rulebook">
+                        <div class="content-section">
+                            <div class="section-header">
+                                <div class="section-icon">
+                                    <i class="fas fa-book"></i>
+                                </div>
+                                <h2 class="section-title">Rules & Regulations</h2>
+                            </div>
+                        </div>
+
+                        <div class="rules-section">
+                            <h3 class="rules-title"><i class="fas fa-users"></i> Challenge format</h3>
+                            <ul class="rules-list">
+                                <li><h3>Mobile phones are allowed only for gameplay</h3></li>
+                                <li><h3>Mobile phones are allowed only for gameplay.</h3></li>
+                                <li><h3>Use of hacks, cheats, or unfair means is strictly prohibited.</h3></li>
+<li><h3>Players must follow in-game fair play rules.</h3></li>
+                                <li><h3>Judges’ decision will be final.</h3></li>
+<li><h3>Teams cannot be changed once registered.</h3></li>
+<li><h3>Token for entry is mandatory.</h3></li>
+                      <li><h3>Top 2 squads will qualify for the semifinals.</h3></li>
+                      <li><h3>Maintain discipline and sportsmanship throughout the event.</h3></li>          
+                            </ul>
+                        </div>
+
+                   
+                    </div>
+
+                    <!-- Contact Content -->
+                    <div class="tab-content" data-content="contact">
+                        <div class="content-section">
+                            <div class="section-header">
+                                <div class="section-icon">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <h2 class="section-title">Contact Information</h2>
+                            </div>
+                        </div>
+
+                        <div class="contact-grid">
+                            <div class="contact-card">
+                                <div class="contact-icon">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                <h3 class="contact-name">Yadnesh Pawar
+                                </h3>
+                                <p class="contact-role">Event Head</p>
+                                <div class="contact-details">
+                                    <p><i class="fas fa-phone"></i> +91 8468983885</p>
+                                      <p><i class="fas fa-envelope"></i> yadneshpawar391@gmail.com</p>
+                                   
+                                </div>
+                            </div>
+
+                            <div class="contact-card">
+                                <div class="contact-icon">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                <h3 class="contact-name">Ashlesh Sorte</h3>
+                                <p class="contact-role">Event Head</p>
+                                <div class="contact-details">
+                                    <p><i class="fas fa-phone"></i> +91 9322184528</p>
+                                    <p><i class="fas fa-envelope"></i> ashleshsorte1@gmail.com</p>
+                                </div>
+                            </div>
+
+                            <div class="contact-card">
+                                <div class="contact-icon">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                <h3 class="contact-name">Pranav Gayki</h3>
+                                <p class="contact-role">Event Head</p>
+                                <div class="contact-details">
+                                    <p><i class="fas fa-phone"></i> +91 7057106670</p>
+                                    <p><i class="fas fa-envelope"></i> pranavgayki28@gmail.co</p>
+                                </div>
+                            </div>
+
+                          
+                        </div>
+
+                        
+
+                       
+                    </div>
+                </div>
+
+                <!-- FAQs (Always visible at bottom) -->
+                <div class="faqs">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <h2 class="section-title">FAQs</h2>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            What are the criteria for Round 1 PPT evaluation?
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                Round 1 PPT will be evaluated based on innovation, feasibility, technical approach, presentation quality, and potential impact of your solution.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            What tools/languages can we use in the coding round?
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                You can use any programming language, framework, or tool of your choice. Popular choices include Python, JavaScript, Java, React, Node.js, and more.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            Will internet access be provided?
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                Yes, high-speed internet access will be provided throughout the 24-hour hackathon for all participants.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            What if our solution is only partially working?
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                Partial implementations are acceptable. Focus on demonstrating your core concept and innovative approach. Judges will consider your progress and problem-solving skills.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            What is the team size?
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                Teams must consist of 2-4 members. Individual participation is not allowed.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            Is the event offline or online?
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                This is an offline event at St. Vincent Pallotti College of Engineering & Technology, Nagpur. All participants must be present in person.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            How do we present the final solution?
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                You will present your working prototype with a live demonstration followed by a Q&A session with judges. Prepare a brief presentation highlighting your approach and solution.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Generate Moving Stars
+        function createStars() {
+            const starsLayer = document.getElementById('starsLayer');
+            const numberOfStars = 150;
+
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * -50 + '%';
+                
+                const xMove = (Math.random() - 0.5) * 200;
+                star.style.setProperty('--x-move', xMove + 'px');
+                
+                const duration = Math.random() * 15 + 10;
+                star.style.animationDuration = duration + 's';
+                star.style.animationDelay = Math.random() * 5 + 's';
+                
+                starsLayer.appendChild(star);
+            }
+        }
+
+        // FAQ Toggle
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                
+                // Close all FAQs
+                faqItems.forEach(faq => faq.classList.remove('active'));
+                
+                // Open clicked FAQ if it wasn't active
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Tab switching
+       // Tab switching
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.getAttribute('data-tab');
+                
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Hide all tab contents
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Show the target tab content
+                const targetContent = document.querySelector(`.tab-content[data-content="${targetTab}"]`);
+                if (targetContent) {
+                    targetContent.classList.add('active');
+                }
+            });
+        });
+
+        // Initialize
+        createStars();
+    </script>
+</body>
+</html>

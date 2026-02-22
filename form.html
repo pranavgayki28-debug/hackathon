@@ -1,0 +1,1095 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COSA - Event Registration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #000;
+            overflow-x: hidden;
+        }
+
+        .main-container {
+            position: relative;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0015 0%, #1a0033 50%, #0f001f 100%);
+            overflow-x: hidden;
+        }
+
+        .stars-layer {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: moveStar linear infinite;
+        }
+
+        @keyframes moveStar {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) translateX(var(--x-move));
+                opacity: 0;
+            }
+        }
+
+        .wave-layer {
+            position: fixed;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(255, 20, 147, 0.15) 0%, transparent 50%);
+            animation: rotateWaves 30s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotateWaves {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .grid-layer {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(138, 43, 226, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(138, 43, 226, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .nebula {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: float-nebula 20s infinite ease-in-out;
+            z-index: 0;
+        }
+
+        @keyframes float-nebula {
+            0% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(100px, -80px) scale(1.2); }
+            50% { transform: translate(-80px, 100px) scale(0.8); }
+            75% { transform: translate(120px, 50px) scale(1.1); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+
+        .header-nav {
+            position: relative;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 80px;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 0, 30, 0.6);
+            border-bottom: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .logo-container:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-ring {
+            width: 60px;
+            height: 60px;
+            border: 3px solid #8A2BE2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: rotate-ring 10s linear infinite;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
+        }
+
+        @keyframes rotate-ring {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .logo-inner {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #8A2BE2, #FF1493);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 20px;
+            color: white;
+        }
+
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(138, 43, 226, 0.8);
+        }
+
+        .left-sidebar, .right-sidebar {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: rgba(10, 0, 30, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 25px 18px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .left-sidebar {
+            left: 0;
+            border-radius: 0 20px 20px 0;
+            border-left: none;
+        }
+
+        .right-sidebar {
+            right: 0;
+            border-radius: 20px 0 0 20px;
+            border-right: none;
+        }
+
+        .sidebar-icon {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.3), rgba(75, 0, 130, 0.3));
+            border: 2px solid rgba(138, 43, 226, 0.5);
+            border-radius: 12px;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.4s;
+            position: relative;
+        }
+
+        .sidebar-icon:hover {
+            background: linear-gradient(135deg, #8A2BE2, #FF1493);
+            border-color: white;
+            transform: scale(1.15);
+            box-shadow: 0 5px 20px rgba(138, 43, 226, 0.6);
+        }
+
+        .left-sidebar .sidebar-icon:hover {
+            transform: translateX(8px) scale(1.15);
+        }
+
+        .right-sidebar .sidebar-icon:hover {
+            transform: translateX(-8px) scale(1.15);
+        }
+
+        .sidebar-label {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.95), rgba(75, 0, 130, 0.95));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 5px 20px rgba(138, 43, 226, 0.6);
+            z-index: 1000;
+        }
+
+        .left-sidebar .sidebar-label {
+            left: 70px;
+            top: 50%;
+            transform: translateY(-50%) translateX(-10px);
+        }
+
+        .right-sidebar .sidebar-label {
+            right: 70px;
+            top: 50%;
+            transform: translateY(-50%) translateX(10px);
+        }
+
+        .sidebar-icon:hover .sidebar-label {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+        }
+
+        .form-container {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 40px;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .form-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 56px;
+            font-weight: 900;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 30px rgba(138, 43, 226, 0.8);
+            animation: titleFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes titleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .form-subtitle {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 1px;
+        }
+
+        .event-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.3), rgba(75, 0, 130, 0.3));
+            border: 2px solid rgba(138, 43, 226, 0.5);
+            border-radius: 30px;
+            padding: 10px 25px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: #8A2BE2;
+            margin-top: 15px;
+            animation: glow-pulse 2s infinite;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(138, 43, 226, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(138, 43, 226, 0.7); }
+        }
+
+        .registration-form {
+            background: linear-gradient(135deg, rgba(15, 10, 40, 0.95), rgba(30, 20, 60, 0.95));
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(138, 43, 226, 0.3);
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                0 0 40px rgba(138, 43, 226, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .registration-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #8A2BE2, #FF1493, #8A2BE2);
+            background-size: 200% 100%;
+            animation: shimmerTop 3s linear infinite;
+        }
+
+        @keyframes shimmerTop {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.3), rgba(75, 0, 130, 0.3));
+            border: 2px solid rgba(138, 43, 226, 0.5);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8A2BE2;
+            font-size: 18px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .form-label .required {
+            color: #FF1493;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(138, 43, 226, 0.1);
+            border: 2px solid rgba(138, 43, 226, 0.3);
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            color: white;
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        .form-input::placeholder, .form-textarea::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: #8A2BE2;
+            background: rgba(138, 43, 226, 0.15);
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+        }
+
+        .form-input:hover, .form-select:hover, .form-textarea:hover {
+            border-color: rgba(138, 43, 226, 0.5);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-select {
+            cursor: pointer;
+        }
+
+        .form-select option {
+            background: #1a0033;
+            color: white;
+        }
+
+        .team-member {
+            background: rgba(138, 43, 226, 0.05);
+            border: 1px solid rgba(138, 43, 226, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .team-member:hover {
+            border-color: rgba(138, 43, 226, 0.4);
+            background: rgba(138, 43, 226, 0.08);
+        }
+
+        .team-member-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .member-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: #8A2BE2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .qr-section {
+            margin-top: 40px;
+            margin-bottom: 30px;
+        }
+
+        .generate-qr-button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.3), rgba(75, 0, 130, 0.3));
+            border: 2px solid rgba(138, 43, 226, 0.5);
+            border-radius: 15px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.4s;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .generate-qr-button:hover {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.5), rgba(75, 0, 130, 0.5));
+            border-color: #8A2BE2;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.4);
+        }
+
+        .qr-display {
+            background: rgba(138, 43, 226, 0.1);
+            border: 2px solid rgba(138, 43, 226, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .qr-code-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(138, 43, 226, 0.3);
+        }
+
+        .qr-code-image {
+            width: 250px;
+            height: 250px;
+            display: block;
+        }
+
+        .qr-instruction {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .qr-amount {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            color: #FFD700;
+            margin-bottom: 25px;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+
+        .screenshot-upload {
+            margin-top: 25px;
+        }
+
+        .upload-label {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: rgba(138, 43, 226, 0.2);
+            border: 2px dashed rgba(138, 43, 226, 0.5);
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+
+        .upload-label:hover {
+            background: rgba(138, 43, 226, 0.3);
+            border-color: #8A2BE2;
+            transform: scale(1.02);
+        }
+
+        .upload-label i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        .submit-screenshot-button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #00C851, #007E33);
+            border: none;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.4s;
+            box-shadow: 0 5px 20px rgba(0, 200, 81, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .submit-screenshot-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 200, 81, 0.5);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #8A2BE2, #FF1493);
+            border: none;
+            border-radius: 15px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.4s;
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.4);
+            position: relative;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(138, 43, 226, 0.6);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .success-message {
+            display: none;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(22, 163, 74, 0.2));
+            border: 2px solid rgba(34, 197, 94, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-icon {
+            font-size: 48px;
+            color: #22c55e;
+            margin-bottom: 15px;
+        }
+
+        .success-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: #22c55e;
+        }
+.popup-message {
+    position: fixed;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 320px;
+    max-width: 90%;
+    padding: 18px 28px;
+    border-radius: 16px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    z-index: 9999;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    transition: all 0.6s ease;
+    opacity: 0;
+}
+
+/* SHOW */
+.popup-message.show {
+    top: 25px;
+    opacity: 1;
+}
+
+/* SUCCESS */
+.popup-message.success {
+    background: linear-gradient(135deg, rgba(34,197,94,0.35), rgba(22,163,74,0.35));
+    border: 2px solid rgba(34,197,94,0.7);
+    color: #22c55e;
+}
+
+/* ERROR */
+.popup-message.error {
+    background: linear-gradient(135deg, rgba(239,68,68,0.35), rgba(185,28,28,0.35));
+    border: 2px solid rgba(239,68,68,0.7);
+    color: #ef4444;
+}
+
+/* WARNING */
+.popup-message.warning {
+    background: linear-gradient(135deg, rgba(234,179,8,0.35), rgba(161,98,7,0.35));
+    border: 2px solid rgba(234,179,8,0.7);
+    color: #facc15;
+}
+
+        @media (max-width: 768px) {
+            .header-nav {
+                padding: 20px 30px;
+            }
+            .form-container {
+                padding: 0 20px;
+                margin: 40px auto;
+            }
+            .form-title {
+                font-size: 36px;
+            }
+            .registration-form {
+                padding: 30px 20px;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .left-sidebar, .right-sidebar {
+                display: none;
+            }
+            .qr-code-image {
+                width: 200px;
+                height: 200px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="../css/mobile.css?v=5000">
+</head>
+<body> 
+     <div id="popupMessage" class="popup-message"></div>
+    <div class="main-container">
+        <div class="stars-layer" id="starsLayer"></div>
+        <div class="wave-layer"></div>
+        <div class="grid-layer"></div>
+        
+        <div class="nebula" style="width: 400px; height: 400px; background: radial-gradient(circle, rgba(138, 43, 226, 0.4), transparent); top: 10%; left: 10%;"></div>
+        <div class="nebula" style="width: 500px; height: 500px; background: radial-gradient(circle, rgba(255, 20, 147, 0.3), transparent); top: 50%; right: 10%;"></div>
+        <div class="nebula" style="width: 350px; height: 350px; background: radial-gradient(circle, rgba(75, 0, 130, 0.4), transparent); bottom: 10%; left: 50%;"></div>
+
+        <nav class="header-nav">
+            <div class="logo-container">
+                <div class="logo-ring">
+                    <div class="logo-inner">C</div>
+                </div>
+                <div class="logo-text">COSA</div>
+            </div>
+        </nav>
+
+          <div class="left-sidebar">
+            <div class="sidebar-icon" onclick="window.location.href='../index.html'">
+                <i class="fas fa-home"></i>
+                <span class="sidebar-label">Home</span>
+            </div>
+       
+            <div class="sidebar-icon" onclick="window.location.href='../gallery.html'">
+                <i class="fas fa-trophy"></i>
+                <span class="sidebar-label">Gallery</span>
+            </div>
+            <div class="sidebar-icon" onclick="window.location.href='../about.html'">
+                <i class="fas fa-info-circle"></i>
+                <span class="sidebar-label">About Us</span>
+            </div>
+            <div class="sidebar-icon" onclick="window.location.href='../team.html'">
+                <i class="fas fa-users"></i>
+                <span class="sidebar-label">Team</span>
+            </div>
+        </div>
+        <div class="right-sidebar">
+            <div class="sidebar-icon">
+                <i class="fab fa-youtube"></i>
+                <span class="sidebar-label">YouTube</span>
+            </div>
+            <div class="sidebar-icon">
+                <i class="fab fa-instagram"></i>
+                <span class="sidebar-label">Instagram</span>
+            </div>
+            <div class="sidebar-icon">
+                <i class="fab fa-linkedin"></i>
+                <span class="sidebar-label">LinkedIn</span>
+            </div>
+            <div class="sidebar-icon">
+                <i class="fab fa-facebook"></i>
+                <span class="sidebar-label">Facebook</span>
+            </div>
+            <div class="sidebar-icon">
+                <i class="fas fa-globe"></i>
+                <span class="sidebar-label">Website</span>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <div class="form-header">
+                <h1 class="form-title">EVENT REGISTRATION</h1>
+                <p class="form-subtitle">Join us for an amazing experience</p>
+                <div class="event-badge">DEBATE 2026</div>
+            </div>
+
+           <form class="registration-form" id="registrationForm">
+                <!-- Team Information -->
+               <input type="hidden" name="event" value="Debate">
+
+
+                <!-- Team Member 1 -->
+                <div class="form-section">
+                    <h2 class="section-title">
+                        <div class="section-icon"><i class="fas fa-user-tie"></i></div>
+                     Participant Details
+                    </h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Full Name <span class="required">*</span></label>
+                            <input type="text" class="form-input" name="name" placeholder="Enter full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email <span class="required">*</span></label>
+                            <input type="email" class="form-input" name="email" placeholder="Enter email address" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Phone Number <span class="required">*</span></label>
+                            <input type="tel" class="form-input" name="phone" placeholder="+91 XXXXX XXXXX" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">College/University <span class="required">*</span></label>
+                            <input type="text" class="form-input" name="college" placeholder="Enter college name" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Branch <span class="required">*</span></label>
+                            <select class="form-select" name="topic" required>
+                                <option value="">Select branch</option>
+                                <option value="CSE">Computer Science Engineering</option>
+                                <option value="IT">Information Technology</option>
+                                <option value="ECE">Electronics & Communication</option>
+                                <option value="EEE">Electrical & Electronics</option>
+                                <option value="Mech">Mechanical Engineering</option>
+                                <option value="Civil">Civil Engineering</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Year <span class="required">*</span></label>
+                            <select class="form-select" name="year" required>
+                                <option value="">Select year</option>
+                                <option value="1">1st Year</option>
+                                <option value="2">2nd Year</option>
+                                <option value="3">3rd Year</option>
+                                <option value="4">4th Year</option>
+                            </select>
+                        </div>
+                          
+                    </div>
+                </div>
+
+                <!-- Team Members  -->
+                <div id="teamMembersContainer">
+                    <!-- Member 2 -->
+                   
+
+              
+
+                   
+                </div>
+
+              
+                <!-- QR Code Payment Section -->
+                <div class="qr-section">
+                    <h2 class="section-title">
+                        <div class="section-icon"><i class="fas fa-money-bill-wave"></i></div>
+                        Payment
+                    </h2>
+                    
+                    <button type="button" class="generate-qr-button" id="generateQrBtn">
+                        <i class="fas fa-qrcode"></i> GENERATE QR CODE FOR PAYMENT
+                    </button>
+                    
+                    <div class="qr-display" id="qrDisplay" style="display: none;">
+                        <div class="qr-code-container">
+                             <img src="../team/qrr.jpeg?v=1" style="width: 300px;">
+
+                        </div>
+                        <p class="qr-instruction" class="required">Scan QR Code to Pay Registration Fee*</p>
+                        <p class="qr-amount">₹30</p>
+                        <p class="qr-instruction" style="font-size: 14px; color: rgba(255, 255, 255, 0.6); margin-top: 10px;">Registration fee </p>
+                        
+                        <div class="screenshot-upload">
+                      <label for="screenshotInput" class="upload-label">
+    <i class="fas fa-cloud-upload-alt"></i>
+    <span id="fileName">Click to upload payment screenshot*</span>
+</label>
+
+<input type="file"
+       id="screenshotInput"
+       name="payment_ss"
+       accept="image/png,image/jpeg"
+       required
+       style="display:none;">
+
+                            <button type="button" class="submit-screenshot-button" id="submitScreenshotBtn" style="display: none;">
+                                <i class="fas fa-check-circle"></i> SUBMIT SCREENSHOT
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i> COMPLETE REGISTRATION
+                </button>
+
+                <!-- Success Message -->
+                <div class="success-message" id="successMessage">
+                    <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="success-text">Registration Successful! Check your email for confirmation.</div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function createStars() {
+            const starsLayer = document.getElementById('starsLayer');
+            const numberOfStars = 150;
+
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * -50 + '%';
+                
+                const xMove = (Math.random() - 0.5) * 200;
+                star.style.setProperty('--x-move', xMove + 'px');
+                
+                const duration = Math.random() * 15 + 10;
+                star.style.animationDuration = duration + 's';
+                star.style.animationDelay = Math.random() * 5 + 's';
+                
+                starsLayer.appendChild(star);
+            }
+        }
+
+        // QR Code functionality
+        const generateQrBtn = document.getElementById('generateQrBtn');
+        const qrDisplay = document.getElementById('qrDisplay');
+        const screenshotInput = document.getElementById('screenshotInput');
+        const submitScreenshotBtn = document.getElementById('submitScreenshotBtn');
+        const fileName = document.getElementById('fileName');
+        const qrCodeImage = document.getElementById('qrCodeImage');
+
+        // Fixed registration fee
+        const REGISTRATION_FEE = 120;
+
+        // Generate QR code with fixed amount
+        function generateQRCode() {
+            return `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=merchant@upi&pn=COSA&am=${REGISTRATION_FEE}&cu=INR`;
+        }
+
+        generateQrBtn.addEventListener('click', () => {
+            const qrCodeUrl = generateQRCode();
+            qrCodeImage.src = qrCodeUrl;
+            qrDisplay.style.display = 'block';
+            generateQrBtn.innerHTML = '<i class="fas fa-check-circle"></i> QR CODE GENERATED';
+            generateQrBtn.style.background = 'linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(22, 163, 74, 0.3))';
+        });
+
+        screenshotInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                fileName.textContent = file.name;
+                submitScreenshotBtn.style.display = 'flex';
+            }
+        });
+
+        submitScreenshotBtn.addEventListener('click', () => {
+            alert('Payment screenshot submitted successfully!');
+            submitScreenshotBtn.innerHTML = '<i class="fas fa-check-double"></i> SCREENSHOT SUBMITTED';
+            submitScreenshotBtn.style.background = 'linear-gradient(135deg, #4CAF50, #2E7D32)';
+            submitScreenshotBtn.disabled = true;
+        });
+
+        // Form submission
+        const form = document.getElementById('registrationForm');
+        const successMessage = document.getElementById('successMessage');
+
+        document.getElementById("screenshotInput").addEventListener("change", function () {
+    if (this.files.length > 0) {
+        document.getElementById("fileName").textContent = this.files[0].name;
+    }
+});
+
+
+        // Input focus animations
+        const inputs = document.querySelectorAll('.form-input, .form-select, .form-textarea');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+                this.parentElement.style.transition = 'transform 0.2s';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+
+        createStars();
+    </script><script>
+document.getElementById("screenshotInput").addEventListener("change", function () {
+    if (this.files.length > 0) {
+        document.getElementById("fileName").textContent = this.files[0].name;
+    }
+});
+</script>
+<script>
+ generateQrBtn.addEventListener('click', () => {
+            // Show the QR display section
+            qrDisplay.style.display = 'block';
+            
+            // Update button appearance
+            generateQrBtn.innerHTML = '<i class="fas fa-check-circle"></i> QR CODE GENERATED';
+            generateQrBtn.style.background = 'linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(22, 163, 74, 0.3))';
+            generateQrBtn.disabled = true;
+            
+            // Scroll to QR code smoothly
+            qrDisplay.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+
+</script>
+</body>
+</html
