@@ -146,6 +146,8 @@ import {
   deleteObject
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
+import { serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
 const form = document.getElementById("eventForm");
 const grid = document.getElementById("eventsGrid");
 
@@ -163,7 +165,7 @@ async function loadEvents() {
 
     grid.innerHTML += `
       <div class="event-card">
-          <img src="${event.image}">
+          <img src="${event.image || 'https://via.placeholder.com/300'}">
           <div class="event-name">
               ${event.name}<br>
               <small>${event.date}</small>
@@ -220,7 +222,7 @@ form.addEventListener("submit", async (e) => {
       name,
       date,
       image: imageUrl,
-      createdAt: new Date()
+     createdAt: serverTimestamp()
     });
   }
 
