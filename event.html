@@ -749,6 +749,10 @@ try {
       `;
 
       grid.appendChild(card);
+
+      card.addEventListener('click', () => {
+        window.location.href = `information.html?eventId=${doc.id}`;
+      });
     });
 
     // 3. Trigger the entrance animations

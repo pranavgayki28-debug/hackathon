@@ -1167,7 +1167,7 @@
               
 
                 <!-- Register Button -->
-                <button class="register-button"  onclick="window.location.href='form.html'">
+                <button class="register-button" onclick="window.location.href='form.html'">
                     <i class="fas fa-arrow-right"></i> REGISTER
                 </button>
 
@@ -1194,7 +1194,9 @@
                     <div class="tab active" data-tab="about">
                         <i class="fas fa-info-circle"></i> ABOUT
                     </div>
-                   
+                    <div class="tab" data-tab="rounds">
+                        <i class="fas fa-clipboard-list"></i> ROUNDS
+                    </div>
                     <div class="tab" data-tab="rulebook">
                         <i class="fas fa-book"></i> RULE BOOK
                     </div>
@@ -1422,7 +1424,7 @@
         </div>
     </div>
 
-<script>
+<script type="module">
     // Star Generation
     const starsLayer = document.getElementById('starsLayer');
     for (let i = 0; i < 150; i++) {
@@ -1440,17 +1442,28 @@
 
     // Tab Switching Logic
     const tabs = document.querySelectorAll('.tab');
-    const contents = document.querySelectorAll('.tab-content');
+    const tabContentContainer = document.getElementById('tabContent');
 
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
             const target = tab.getAttribute('data-tab');
+            
             tabs.forEach(t => t.classList.remove('active'));
+            
+            // Deactivate all content sections directly under tabContentContainer
+            const contents = tabContentContainer.querySelectorAll('.tab-content');
             contents.forEach(c => c.classList.remove('active'));
+            
             tab.classList.add('active');
-            document.getElementById(target).classList.add('active');
+            
+            // Activate the target content section
+            const targetContent = tabContentContainer.querySelector(`[data-content="${target}"]`);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
         });
     });
+
 
     // FAQ Accordion Logic
     const faqItems = document.querySelectorAll('.faq-item');
@@ -1459,6 +1472,145 @@
             item.classList.toggle('active');
         });
     });
+
+
+    // --- DYNAMIC EVENT LOADING ---
+    import { db } from "./firebase.js";
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    async function loadEventDetails() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const eventId = urlParams.get('eventId');
+
+        if (!eventId) {
+            console.error("No eventId found in URL");
+            // You could show an error message to the user here
+            document.body.innerHTML = `<div style="color: white; text-align: center; padding-top: 50px;">
+                                            <h1>Error: Event Not Found</h1>
+                                            <p>No event ID was provided. Please go back to the <a href="event.html">events page</a> and select an event.</p>
+                                        </div>`;
+            return;
+        }
+
+        try {
+            const eventRef = doc(db, "events", eventId);
+            const docSnap = await getDoc(eventRef);
+
+            if (docSnap.exists()) {
+                const event = docSnap.data();
+                populateEventData(event);
+            } else {
+                console.error("No such event found for ID:", eventId);
+                 document.body.innerHTML = `<div style="color: white; text-align: center; padding-top: 50px;">
+                                            <h1>Error: Event Not Found</h1>
+                                            <p>The requested event could not be found. Please go back to the <a href="event.html">events page</a>.</p>
+                                        </div>`;
+            }
+        } catch (error) {
+            console.error("Error loading event details:", error);
+            // Handle error display
+        }
+    }
+
+    function populateEventData(event) {
+        // Page Title
+        document.title = `${event.name} - CampusConnect`;
+
+        // Event Title and Tagline
+        document.querySelector('.event-title').textContent = event.name || 'Event Title';
+        document.querySelector('.event-tagline').textContent = event.tagline || 'Join us for this exciting event!';
+
+        // Left Section
+        document.querySelector('.event-poster img').src = event.image || 'https://picsum.photos/400/500?random=1';
+        document.querySelector('.register-button').onclick = () => window.location.href = event.registrationLink || 'form.html';
+
+        // Team Info
+        const teamInfoValue = document.querySelector('.team-info .info-box:nth-child(1) .info-label h3');
+        if (teamInfoValue) teamInfoValue.textContent = `Team Size: ${event.teamSize || 'N/A'} Person only`;
+        
+        const entryFeeValue = document.querySelector('.team-info .info-box:nth-child(2) .info-value');
+        if (entryFeeValue) entryFeeValue.textContent = `₹${event.entryFee || '0'} / Person`;
+
+        // ABOUT Tab
+        const aboutContent = document.querySelector('[data-content="about"] .section-content');
+        if (aboutContent) aboutContent.textContent = event.about || 'Details about the event will be updated soon.';
+        
+        const prizeAmount = document.querySelector('.prize-amount');
+        if (prizeAmount) prizeAmount.textContent = `Upto ₹${event.prizePool || '0'}`;
+
+        const infoCards = document.querySelectorAll('.info-grid .info-card-content');
+        if (infoCards.length > 1) {
+            infoCards[0].innerHTML = `${event.date || 'TBA'} <br> ${event.time || ''}`;
+            infoCards[1].textContent = event.venue || 'TBA';
+        }
+
+        // RULE BOOK Tab
+        const rulesContainer = document.querySelector('[data-content="rulebook"]');
+        if (rulesContainer && event.rules && event.rules.length > 0) {
+            const rulesList = rulesContainer.querySelector('.rules-list');
+            rulesList.innerHTML = '';
+            event.rules.forEach(rule => {
+                rulesList.innerHTML += `<li><h3>${rule}</h3></li>`;
+            });
+        } else {
+             rulesContainer.innerHTML = '<p class="section-content">Rules will be updated soon.</p>';
+        }
+         const roundsContainer = document.querySelector('[data-content="rounds"]');
+        if (roundsContainer && event.rounds && event.rounds.length > 0) {
+            let roundsHtml = `
+                <div class="content-section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-clipboard-list"></i></div>
+                        <h2 class="section-title">Competition Rounds</h2>
+                    </div>
+                </div>`;
+            event.rounds.forEach((round, index) => {
+                roundsHtml += `
+                    <div class="round-card">
+                        <div class="round-header">
+                            <div class="round-number">${String(index + 1).padStart(2, '0')}</div>
+                            <div class="round-info">
+                                <h3 class="round-title">${round.title || ''}</h3>
+                                <p class="round-subtitle">${round.subtitle || ''}</p>
+                            </div>
+                        </div>
+                        <div class="round-content">
+                            <h3>${round.description || ''}</h3>
+                            <p><strong>Time Limit:</strong> <b>${round.timeLimit || 'N/A'}</b></p>
+                        </div>
+                    </div>`;
+            });
+            roundsContainer.innerHTML = roundsHtml;
+        } else if(roundsContainer) {
+            roundsContainer.innerHTML = '<p class="section-content">Round details will be updated soon.</p>';
+        }
+
+
+        // CONTACT Tab
+        const contactContainer = document.querySelector('[data-content="contact"]');
+        if (contactContainer && event.contacts && event.contacts.length > 0) {
+            const contactGrid = contactContainer.querySelector('.contact-grid');
+            contactGrid.innerHTML = '';
+            event.contacts.forEach(contact => {
+                contactGrid.innerHTML += `
+                    <div class="contact-card">
+                        <div class="contact-icon"><i class="fas fa-user-tie"></i></div>
+                        <h3 class="contact-name">${contact.name || ''}</h3>
+                        <p class="contact-role">${contact.role || 'Event Head'}</p>
+                        <div class="contact-details">
+                            <p><i class="fas fa-phone"></i> ${contact.phone || 'N/A'}</p>
+                            <p><i class="fas fa-envelope"></i> ${contact.email || 'N/A'}</p>
+                        </div>
+                    </div>`;
+            });
+        } else if (contactContainer){
+            contactContainer.querySelector('.contact-grid').innerHTML = '<p class="section-content">Contact information will be updated soon.</p>';
+        }
+    }
+
+    // Initial Load
+    window.addEventListener("load", loadEventDetails);
+
 </script>
 </body>
 </html>
