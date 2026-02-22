@@ -110,34 +110,39 @@ body{
     </div>
 
     <form id="loginForm">
-        <input type="text" id="username" placeholder="Admin Username" required>
+        <input type="email" id="username" placeholder="Admin Email" required>
         <input type="password" id="password" placeholder="Admin Password" required>
         <button type="submit">LOGIN</button>
     </form>
 </div>
 
-<script>
+<script type="module">
+
+import { auth } from "./firebase.js";
+import { signInWithEmailAndPassword }
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
 const form = document.getElementById("loginForm");
 const errorMessage = document.getElementById("errorMessage");
 
-// ⚠️ Change these credentials
-const ADMIN_USERNAME = "admin";
-const ADMIN_PASSWORD = "12345";
-
-form.addEventListener("submit", function(e){
+form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const username = document.getElementById("username").value;
+    const email = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
-    if(username === ADMIN_USERNAME && password === ADMIN_PASSWORD){
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
+
         alert("Login Successful!");
-        window.location.href = "dashboard.html"; // redirect page
-    } else {
+        window.location.href = "dashboard.html";
+
+    } catch (error) {
         errorMessage.style.display = "block";
+        console.error(error.message);
     }
 });
-</script>
 
+</script>
 </body>
 </html>

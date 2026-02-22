@@ -191,17 +191,20 @@ form.addEventListener("submit", async (e) => {
   let imageUrl = "";
 
   if (file) {
-    const storageRef = ref(storage, "events/" + file.name);
+    const storageRef = ref(storage, "events/" + Date.now() + "_" + file.name);
     await uploadBytes(storageRef, file);
     imageUrl = await getDownloadURL(storageRef);
   }
 
   if (editId) {
-    await updateDoc(doc(db, "events", editId), {
-      name,
-      date,
-      image: imageUrl
-    });
+
+    const updateData = { name, date };
+
+    if (imageUrl) {
+      updateData.image = imageUrl;
+    }
+
+    await updateDoc(doc(db, "events", editId), updateData);
 
     editId = null;
     document.getElementById("formTitle").innerText = "Add Event";
@@ -227,17 +230,16 @@ form.addEventListener("submit", async (e) => {
 
 /* ================= DELETE ================= */
 
-window.deleteEvent = async (id, imageUrl) => {
+window.deleteEvent = async (id) => {
 
   if (!confirm("Delete this event?")) return;
 
-  await deleteDoc(doc(db, "events", id));
-
-  // Delete image from storage
-  const imageRef = ref(storage, imageUrl);
-  await deleteObject(imageRef);
-
-  loadEvents();
+  try {
+    await deleteDoc(doc(db, "events", id));
+    loadEvents();
+  } catch (error) {
+    console.error("Delete error:", error);
+  }
 };
 
 /* ================= EDIT ================= */
