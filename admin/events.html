@@ -128,31 +128,33 @@ button {
 
 <script type="module">
 
-import { db, storage } from "./firebase.js";
-
+// 1. Paste the updated imports here
+import { db } from "../firebase.js";
 import {
   collection,
   addDoc,
   getDocs,
   deleteDoc,
   doc,
-  updateDoc
+  updateDoc,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  deleteObject
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
-import { serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+// 2. Add this helper function to convert the image to text
+const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+});
 
 const form = document.getElementById("eventForm");
 const grid = document.getElementById("eventsGrid");
-
 let editId = null;
 
+/* ================= LOAD EVENTS ================= */
+// ... rest of your code ...
 /* ================= LOAD EVENTS ================= */
 
 async function loadEvents() {
@@ -183,6 +185,8 @@ window.loadEvents = loadEvents;
 
 /* ================= ADD / UPDATE EVENT ================= */
 
+/* ================= ADD / UPDATE EVENT ================= */
+
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -192,48 +196,61 @@ form.addEventListener("submit", async (e) => {
 
   let imageUrl = "";
 
+  // 1. Convert file to Base64 text string
   if (file) {
-    const storageRef = ref(storage, "events/" + Date.now() + "_" + file.name);
-    await uploadBytes(storageRef, file);
-    imageUrl = await getDownloadURL(storageRef);
-  }
-
-  if (editId) {
-
-    const updateData = { name, date };
-
-    if (imageUrl) {
-      updateData.image = imageUrl;
-    }
-
-    await updateDoc(doc(db, "events", editId), updateData);
-
-    editId = null;
-    document.getElementById("formTitle").innerText = "Add Event";
-
-  } else {
-
-    if (!imageUrl) {
-      alert("Please upload image");
+    try {
+      imageUrl = await toBase64(file); 
+      console.log("Image converted to Base64 string");
+    } catch (error) {
+      console.error("Conversion error:", error);
+      alert("Error processing image.");
       return;
     }
-
-    await addDoc(collection(db, "events"), {
-      name,
-      date,
-      image: imageUrl,
-     createdAt: serverTimestamp()
-    });
   }
 
-  form.reset();
-  loadEvents();
+  try {
+    if (editId) {
+      // UPDATE EXISTING EVENT
+      const updateData = { name, date };
+      
+      // Only update image if a new one was selected
+      if (imageUrl) {
+        updateData.image = imageUrl;
+      }
+
+      await updateDoc(doc(db, "events", editId), updateData);
+      console.log("Event updated in Firestore");
+
+      editId = null;
+      document.getElementById("formTitle").innerText = "Add Event";
+    } else {
+      // ADD NEW EVENT
+      if (!imageUrl) {
+        alert("Please upload an image");
+        return;
+      }
+
+      await addDoc(collection(db, "events"), {
+        name,
+        date,
+        image: imageUrl, // Saving the long string here
+        createdAt: serverTimestamp(),
+      });
+      console.log("Event added to Firestore");
+    }
+
+    form.reset();
+    loadEvents();
+  } catch (error) {
+    console.error("Firestore error:", error);
+    // This usually happens if the image string makes the document > 1MB
+    alert("Error saving to Firestore. Is the image too large? (Max 1MB)");
+  }
 });
 
 /* ================= DELETE ================= */
 
 window.deleteEvent = async (id) => {
-
   if (!confirm("Delete this event?")) return;
 
   try {
@@ -243,7 +260,6 @@ window.deleteEvent = async (id) => {
     console.error("Delete error:", error);
   }
 };
-
 /* ================= EDIT ================= */
 
 window.editEvent = (id, name, date) => {

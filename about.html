@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>About COSA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -44,10 +47,23 @@
         }
 
         @keyframes moveStar {
-            0% { transform: translateY(0) translateX(0); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(100vh) translateX(var(--x-move)); opacity: 0; }
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(100vh) translateX(var(--x-move));
+                opacity: 0;
+            }
         }
 
         .wave-layer {
@@ -56,7 +72,7 @@
             height: 200%;
             top: -50%;
             left: -50%;
-            background: 
+            background:
                 radial-gradient(ellipse at 20% 30%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
                 radial-gradient(ellipse at 80% 70%, rgba(255, 20, 147, 0.15) 0%, transparent 50%);
             animation: rotateWaves 30s linear infinite;
@@ -64,15 +80,20 @@
         }
 
         @keyframes rotateWaves {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .grid-layer {
             position: fixed;
             width: 100%;
             height: 100%;
-            background-image: 
+            background-image:
                 linear-gradient(rgba(138, 43, 226, 0.1) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(138, 43, 226, 0.1) 1px, transparent 1px);
             background-size: 50px 50px;
@@ -82,8 +103,13 @@
         }
 
         @keyframes gridMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50px, 50px); }
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(50px, 50px);
+            }
         }
 
         /* Header */
@@ -118,8 +144,13 @@
         }
 
         @keyframes rotate-ring {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .logo-inner {
@@ -503,9 +534,18 @@
 
         /* Responsive */
         @media (max-width: 1024px) {
-            .hero-stats { grid-template-columns: 1fr; }
-            .welcome-content { grid-template-columns: 1fr; }
-            .footer-content { grid-template-columns: 1fr 1fr; }
+            .hero-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-content {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+
             .profile-card {
                 flex-direction: column;
                 align-items: center;
@@ -514,13 +554,37 @@
         }
 
         @media (max-width: 768px) {
-            .header-nav { padding: 20px 30px; flex-direction: column; gap: 20px; }
-            .main-nav { gap: 30px; }
-            .content-wrapper { padding: 40px 20px; }
-            .section { padding: 30px 20px; }
-            .footer { padding: 40px 20px 20px; }
-            .footer-content { grid-template-columns: 1fr; }
-            .left-sidebar, .right-sidebar { display: none; }
+            .header-nav {
+                padding: 20px 30px;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .main-nav {
+                gap: 30px;
+            }
+
+            .content-wrapper {
+                padding: 40px 20px;
+            }
+
+            .section {
+                padding: 30px 20px;
+            }
+
+            .footer {
+                padding: 40px 20px 20px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .left-sidebar,
+            .right-sidebar {
+                display: none;
+            }
+
             .profile-card {
                 flex-direction: column;
                 align-items: center;
@@ -529,7 +593,8 @@
         }
 
         /* Sidebars - Same as main page */
-        .left-sidebar, .right-sidebar {
+        .left-sidebar,
+        .right-sidebar {
             position: fixed;
             top: 50%;
             transform: translateY(-50%);
@@ -616,50 +681,58 @@
             top: 50%;
             transform: translateY(-50%) translateX(10px);
         }
-.sidebar-link {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-}
-.section {
-    display: flex;
-    justify-content: center;   /* horizontal center */
-    align-items: center;       /* vertical center (if section has height) */
-    flex-direction: column;
-}
 
-.video-box {
-    width: 650px;
-    height: 300px;
-    margin: 30px auto;   /* centers horizontally */
-    overflow: hidden;
-    border-radius: 10px;
-}
-.video-card {
-    width: 700px;        /* 🔧 change width here */
-    height: 400px;       /* 🔧 change height here */
-    background: #000;
-    border-radius: 18px;
-    overflow: hidden;
-    margin: 25px 0;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-}
+        .sidebar-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .section {
+            display: flex;
+            justify-content: center;
+            /* horizontal center */
+            align-items: center;
+            /* vertical center (if section has height) */
+            flex-direction: column;
+        }
+
+        .video-box {
+            width: 650px;
+            height: 300px;
+            margin: 30px auto;
+            /* centers horizontally */
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .video-card {
+            width: 700px;
+            /* 🔧 change width here */
+            height: 400px;
+            /* 🔧 change height here */
+            background: #000;
+            border-radius: 18px;
+            overflow: hidden;
+            margin: 25px 0;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+        }
 
 
-.video-card iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
+        .video-card iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
 
 
-@media (max-width: 768px) {
-    .video-card {
-        width: 95%;
-        height: auto;
-        aspect-ratio: 16 / 9;
-    }
-}
+        @media (max-width: 768px) {
+            .video-card {
+                width: 95%;
+                height: auto;
+                aspect-ratio: 16 / 9;
+            }
+        }
 
 
         .sidebar-icon:hover .sidebar-label {
@@ -668,11 +741,10 @@
         }
     </style>
     <link rel="stylesheet" href="/css/mobile.css?v=3000">
-    <link rel="stylesheet" href="css/mobile.css?v=3000">
 </head>
-     
+
 <body>
- 
+
     <div class="main-container">
         <!-- Background Effects -->
         <div class="stars-layer" id="starsLayer"></div>
@@ -690,26 +762,26 @@
             <div class="main-nav">
                 <a href="event.html">EVENTS</a>
                 <a href="#">WINNERS</a>
-               
+
             </div>
         </nav>
 
         <!-- Left Sidebar -->
         <div class="left-sidebar">
-            <div class="sidebar-icon"  onclick="window.location.href='index.html'">
+            <div class="sidebar-icon" onclick="window.location.href='index.html'">
                 <i class="fas fa-home"></i>
                 <span class="sidebar-label">Home</span>
             </div>
-    
+
             <div class="sidebar-icon" onclick="window.location.href='gallery.html'">
                 <i class="fas fa-trophy"></i>
                 <span class="sidebar-label">Gallery</span>
             </div>
-            <div class="sidebar-icon"  onclick="window.location.href='about.html'">
+            <div class="sidebar-icon" onclick="window.location.href='about.html'">
                 <i class="fas fa-info-circle"></i>
                 <span class="sidebar-label">About Us</span>
             </div>
-            <div class="sidebar-icon"  onclick="window.location.href='team.html'">
+            <div class="sidebar-icon" onclick="window.location.href='team.html'">
                 <i class="fas fa-users"></i>
                 <span class="sidebar-label">Team</span>
             </div>
@@ -717,33 +789,33 @@
 
         <!-- Right Sidebar -->
         <div class="right-sidebar">
-    <a href="https://www.youtube.com/@Cosa_gpy" target="_blank">
-    <div class="sidebar-icon">
-        <i class="fab fa-youtube"></i>
-        <span class="sidebar-label">YouTube</span>
-    </div>
-</a>     <a href="https://www.instagram.com/computer_wale_gpy?igsh=cW9vc3Y5NDZtNDY1" target="_blank">
-    <div class="sidebar-icon">
-        <i class="fab fa-instagram"></i>
-        <span class="sidebar-label">Instagram</span>
-    </div>
-</a>
+            <a href="https://www.youtube.com/@Cosa_gpy" target="_blank">
+                <div class="sidebar-icon">
+                    <i class="fab fa-youtube"></i>
+                    <span class="sidebar-label">YouTube</span>
+                </div>
+            </a> <a href="https://www.instagram.com/computer_wale_gpy?igsh=cW9vc3Y5NDZtNDY1" target="_blank">
+                <div class="sidebar-icon">
+                    <i class="fab fa-instagram"></i>
+                    <span class="sidebar-label">Instagram</span>
+                </div>
+            </a>
             <!-- <div class="sidebar-icon">
                 <i class="fab fa-linkedin"></i>
                 <span class="sidebar-label">LinkedIn</span>
             </div> -->
-           <a href="https://www.facebook.com/share/1AAisLXPTC/" target="_blank">
-    <div class="sidebar-icon">
-        <i class="fab fa-facebook"></i>
-        <span class="sidebar-label">Facebook</span>
-    </div>
-</a>
-           <a href="https://gpyavatmal.ac.in/gpy/" target="_blank">
-    <div class="sidebar-icon">
-        <i class="fas fa-globe"></i>
-        <span class="sidebar-label">Website </span>
-    </div>
-</a>
+            <a href="https://www.facebook.com/share/1AAisLXPTC/" target="_blank">
+                <div class="sidebar-icon">
+                    <i class="fab fa-facebook"></i>
+                    <span class="sidebar-label">Facebook</span>
+                </div>
+            </a>
+            <a href="https://gpyavatmal.ac.in/gpy/" target="_blank">
+                <div class="sidebar-icon">
+                    <i class="fas fa-globe"></i>
+                    <span class="sidebar-label">Website </span>
+                </div>
+            </a>
         </div>
 
         <!-- Content -->
@@ -772,13 +844,25 @@
                 <h2 class="section-title">Welcome to Priyadarshini College of Engineering</h2>
                 <div class="welcome-content">
                     <div class="welcome-image">
-                        <img src="img/gpy11.jpg" alt="College Building">
+                        <img src="uploads/clg.jpeg" alt="College Building">
                     </div>
                     <div class="welcome-text">
                         <h3>Excellence in Technical Education</h3>
-                        <p>Government Polytechnic, Yavatmal stands as a beacon of technical education, nurturing young minds into skilled professionals. The college is accredited by NAAC with A grade.</p>
-                        <p><strong>Vision:</strong> To develop a knowledge-based society with clarity of concepts and clarity in lifestyle to serve society with utmost integrity.</p>
-                        <p><strong>Mission:</strong> To sensitize youth for technoscially and socially relevant issues and inculcate in them the driving ethics to uphold the spirit of professionalism.</p>
+                        <p>Priyadarshini College of Engineering, Nagpur stands as a premier institution dedicated to
+                            quality technical education and innovation. The college focuses on developing skilled
+                            engineers through strong academic foundations, practical learning, and industry-oriented
+                            training. It is recognized for nurturing students into competent professionals prepared to
+                            meet modern technological challenges.
+                        </p>
+                        <p><strong>Vision:</strong>To emerge as a center of excellence in engineering education by
+                            fostering innovation, technical competence, ethical values, and lifelong learning to serve
+                            society and industry.</p>
+                        <p><strong>Mission:</strong> * To provide high-quality technical education through modern
+                            teaching-learning practices.
+                            * To promote research, innovation, and entrepreneurship among students.
+                            * To develop socially responsible and ethically strong engineering professionals.
+                            * To strengthen industry–institute interaction for practical exposure and skill development.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -789,183 +873,121 @@
                 <div class="profile-grid">
                     <div class="profile-card">
                         <div class="profile-image">
-                            <img src="img/matalesir.jpeg" alt="Director">
+                            <img src="uploads/prin.jpeg" alt="Director">
                         </div>
                         <div class="profile-info">
-                            <h4>AP Matale</h4>
-             
-                            <p>Our college is guided by the visionary leadership of AP Matale Sir, who has been serving as the Principal with dedication and commitment to academic excellence. With rich experience in education and administration, he has played a vital role in shaping the institution’s growth and maintaining high academic standards..</p>
-                            <p>Under his leadership, the college has achieved remarkable progress in academics, co-curricular activities, and student development. AP Matale Sir strongly believes in holistic education that empowers students with knowledge, skills, and ethical values, preparing them to face real-world challenges.</p>
-                        </div>
+                            <h4>Dr. Shrikrishna A. Dhale,</h4> 
+
+                            <p>dent development. AP Matale Sir strongly believes in holistic education that empowers
+                                students with knowledge, skills, and ethical values, preparing them to face real-world
+                                challenges.</p>
+                      Dr. Shrikrishna A. Dhale,
+                        Principal , Priyadarshini College of Engineering
+                        Dr. S. A. Dhale is a visionary academician and administrator who steers Priyadarshini College of
+                        Engineering (PCE) with a philosophy that education must evolve from mere knowledge dissemination
+                        to active innovation. With an illustrious career spanning over 34 years, Dr. Dhale obtained his
+                        B.E. (Civil Engg.) in 1991, M.Tech (Structures) in 1999, and his Ph.D. from RTM Nagpur
+                        University in 2014.
+                        Under his dynamic leadership, PCE has transitioned into a robust Autonomous Ecosystem, imparting
+                        quality education that balances artistic monumental infrastructure with a deep commitment to
+                        human values. Dr. Dhale champions a new academic paradigm where the goal is not just to produce
+                        employable graduates, but to nurture Job Creators. To realize this, he has spearheaded the
+                        development of a state-of-the-art Incubation Centre and start-up ecosystem on campus, ensuring
+                        that students are prepared for entrepreneurship with the necessary funding.</p>
+                        <p>Under his leadership, the college has achieved remarkable progress in academics,
+                            co-curricular activities, and stu
+                          </div>     
                     </div>
                 </div>
             </div>
 
             <!-- Principal Section -->
             <div class="section">
-                <h2 class="section-title">Our HOD</h2>
+                <h2 class="section-title">Our Vice-Principal</h2>
                 <div class="profile-grid">
                     <div class="profile-card">
                         <div class="profile-image">
-                            <img src="img/metemam.PNG" alt="Principal">
+                            <img src="uploads/vice.jpeg" alt="Principal">
                         </div>
                         <div class="profile-info">
-                            <h4>S.S Mete</h4>
+                            <h4>Dr. Gajendra Asutkar,</h4>
                             <!-- <div class="position">Principal, SVPCET</div> -->
-                            <p>S.S Mete, Head of the Computer Engineering Department, is a motivating force behind the department’s academic and technical growth. She consistently encourages students to participate in technical events, workshops, and competitions to bridge the gap between theory and practice.</p>
-                            <p>This event reflects her vision of developing skilled, confident, and industry-ready engineers who are capable of solving real-world problems through technology.</p>
+                            <p>Dr. Gajendra Asutkar is a distinguished academician and a seasoned administrator bringing
+                                over 25 years of rich institutional experience to the leadership team. A doctoral
+                                alumnus of the prestigious VNIT, Nagpur, he serves as the academic anchor of the
+                                institute, orchestrating operational efficiency and research excellence.
+                            </p>
+                            <p>He holds a pivotal position in shaping the technical education landscape of the region.
+                                As the incumbent Chairman of the Board of Studies (BoS) for Artificial Intelligence,
+                                Data Science, and Emerging Engineering Programs at RTM Nagpur University, he is the
+                                Chief Architect behind the modern, industry-aligned curriculum implemented across the
+                                university. His role ensures that the syllabus remains agile and synchronized with
+                                Industry standards.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-                    <div class="section">
-                <h2 class="section-title">Our Coordinator</h2>
-                <div class="profile-grid">
-                    <div class="profile-card">
-                        <div class="profile-image">
-                            <img src="img/bmam.jpeg" alt="Principal">
-                        </div>
-                        <div class="profile-info">
-                            <h4>B.P Bhagat</h4>
-                            <!-- <div class="position">Principal, SVPCET</div> -->
-                            <p>Ms. Bhagat, the Coordinator of COSA (Computer Engineering Student Association), plays a key role in guiding and mentoring students in academic, technical, and co-curricular activities. With her continuous support and dedication, COSA has become an active platform for students to enhance their technical skills, leadership qualities, and teamwork.
-</p>
-                            <p>Under her guidance, COSA successfully organizes technical events, workshops, seminars, and student-driven initiatives that encourage innovation, creativity, and practical learning. Her motivation and encouragement inspire students to actively participate and excel in various departmental activities and events.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-          
-                 <div class="section">
-                <h2 class="section-title">Our President</h2>
-                <div class="profile-grid">
-                    <div class="profile-card">
-                        <div class="profile-image">
-                            <img src="team/ath11.JPG" alt="Principal">
-                        </div>
-                        <div class="profile-info">
-                            <h4>Atharva Karule</h4>
-                            <!-- <div class="position">Principal, SVPCET</div> -->
-                            <p>Atharva Karule, Student President of COSA (Computer Engineering Student Association), leads the association with enthusiasm, responsibility, and a strong commitment to student development. With a passion for technology and teamwork, he plays an important role in coordinating students and encouraging active participation in departmental activities.
-</p>
-                            <p>Under his leadership, COSA aims to create a collaborative platform where students can enhance their technical skills, leadership abilities, and practical knowledge through events, workshops, and competitions. This event reflects his vision of fostering innovation, unity, and excellence among Computer Engineering students.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-                 <div class="section">
-                <h2 class="section-title">Our President</h2>
-                <div class="profile-grid">
-                    <div class="profile-card">
-                        <div class="profile-image">
-                            <img src="team/kakde.jpeg" alt="Principal">
-                        </div>
-                        <div class="profile-info">
-                            <h4>Nilima Kakde</h4>
-                            <!-- <div class="position">Principal, SVPCET</div> -->
-                            <p>Ms. Nilima Kakde, Student President of COSA (Computer Engineering Student Association), is known for her dedication, leadership, and active involvement in student activities. She plays a key role in coordinating students and ensuring the smooth execution of COSA initiatives.
-</p>
-                            <p>With a strong focus on teamwork, innovation, and student empowerment, she encourages members to participate in technical events, workshops, and academic activities. This event reflects her vision of creating an engaging and inclusive platform that promotes learning, creativity, and leadership among Computer Engineering students.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+           
+           
             <!-- About COSA Section -->
             <div class="section">
-                <h2 class="section-title">About COSA</h2>
-<div class="section">
-    <div class="video-card">
-        <iframe
-            src="https://www.youtube.com/embed/wmWPWxPF2IM?autoplay=1&mute=1&loop=1&playlist=wmWPWxPF2IM&controls=0"
-            frameborder="0"
-            allow="autoplay; encrypted-media"
-            allowfullscreen>
-        </iframe>
-    </div>
-</div>
-
-
+                <h2 class="section-title">ABOUT INFRASTRUCTURE</h2>
+                
 
 
 
                 <p class="about-text">
-                  COSA (Computer Engineering Students’ Association) is a student-driven professional body formed with the vision of empowering Computer Engineering students through technical excellence, innovation, and collaboration. COSA acts as a platform where students can enhance their technical skills, leadership qualities, and industry readiness beyond the academic curriculum.
+                    Spread over a sprawling 72 acres,the campus is enriched with state of the art sports and
+                    recreational facilities. Well connected through rail, road and air,the campus is just at a distance
+                    of 0.5km from Metro station. In a built up area of approx. 32900 sq.m,the spacious campus houses the
+                    administrative building, Independent library building with more than 62,601 books, digital
+                    library,e-learning materials,619 e-journals,127 National Journals central computing facility with
+                    100 Mbps internet connectivity and WiFi, workshops, gymnasium and an innovative waste recycling
+                    system, rainwater harvesting system, seminar halls, library, canteen and green gardens dotted with
+                    solar powered lamps.
                 </p>
                 <p class="about-text">
-                 The association organizes a wide range of activities including technical workshops, seminars, coding events, project exhibitions, industrial talks, hackathons, and expert sessions to bridge the gap between theoretical knowledge and practical application. COSA encourages students to explore emerging technologies, develop problem-solving skills, and stay updated with current industry trends.
-                </p>
-                <p class="about-text">
-                    At COSA, we bring together engineers, innovators, and tech enthusiasts from across the nation. The festival features lectures, workshops, exhibitions, and exciting competitions covering the latest trends in technology.
-                </p>
-                <p class="about-text">
-COSA also focuses on overall personality development by promoting teamwork, communication skills, and leadership through events, competitions, and collaborative projects. By fostering a culture of learning, creativity, and innovation, COSA aims to prepare students to become competent professionals and responsible contributors to the technology-driven world
+                    The structure embraces within its fold, classrooms, drawing halls, Computer laboratories with more
+                    than 1872 computers. etc.
             </div>
+
+            <div class="section">
+                <h2 class="section-title">ABOUT PCE</h2>
+              
+
+
+                
+                <p class="about-text">
+                    A Legacy of Academic Excellence
+Established in 1990, Priyadarshini College of Engineering (PCE) stands as the Flagship Institute of the Sanstha, leveraging a distinguished 35-year legacy to shape globally competent technocrats. We are not just an educational institution; we are a dynamic Center of Innovation committed to imparting academic excellence through scientific inquiry, advanced technology, and a profound sense of Corporate Social Responsibility (CSR).
+       A New Era of Autonomy (Since 2023-24) Marking a watershed moment in our academic journey, the institute was conferred Autonomous Status by the UGC and Government of Maharashtra starting from the Academic Year 2023-24. This academic sovereignty empowers us to design an agile, industry-aligned curriculum, implement the
+National Education Policy (NEP-2020) effectively, and foster an ecosystem of flexibility and innovation.
+       Comprehensive Academic Landscape PCE offers a vast and diverse academic portfolio designed to support vertical growth and interdisciplinary research. Our infrastructure comprises:
+14 Undergraduate (UG) Programs
+06 Postgraduate (PG) Programs and
+04 Doctoral (Ph.D.) Programs / Research Centers Benchmarks of Quality & Global Compliance The institute’s unwavering commitment to quality assurance is validated by the highest national bodies:
+
+Institutional Excellence (NAAC A+): PCE has been awarded the prestigious ‘A+’ Grade by NAAC with a stellar CGPA of 3.45 (valid through 2027). This distinction is a testament to our robust governance and best-in-class infrastructure.
+
+Program-Specific Excellence (NBA Accredited): Demonstrating our strict adherence to Outcome-Based Education (OBE), our 6 key departments have successfully achieved National Board of Accreditation (NBA) status and 4 are on the verge of it. 4 emerging branches will also achieve it in coming 2-3 years.
+                </p>
+                <p class="about-text">
+                    This alignment of Autonomy and Accreditation ensures that our graduates are not just degree holders, but industry-ready professionals prepared for the global workforce.
+            </div>
+
+     
 
             <!-- Chief Guest Section -->
-                   <div class="section">
-                <h2 class="section-title">Faculty Coordinator</h2>
-                <div class="guest-card">
-                    <div class="guest-image">
-                        <img src="team/dohe.jpg" alt="Chief Guest">
-                    </div>
-                    <div class="guest-name"> S.S.Dohe</div>
-                    <div class="guest-title"></div>
-                </div>
-            </div>
+        
+            <!-- Chief Guest Section -->
+         
 
-             <!-- Chief Guest Section -->
-            <div class="section">
-                <h2 class="section-title">Faculty Coordinator</h2>
-                <div class="guest-card">
-                    <div class="guest-image">
-                        <img src="team/bahale.jpeg" alt="Chief Guest">
-                    </div>
-                    <div class="guest-name">S.V.Bahale</div>
-                    <div class="guest-title"></div>
-                </div>
-            </div>
-             <!-- Chief Guest Section -->
-            <div class="section">
-                <h2 class="section-title">Faculty Coordinator</h2>
-                <div class="guest-card">
-                    <div class="guest-image">
-                        <img src="team/rangari.jpeg" alt="Chief Guest">
-                    </div>
-                    <div class="guest-name">S.P.Rangari</div>
-                    <div class="guest-title"></div>
-                </div>
-            </div>
+            <!-- Chief Guest Section -->
 
-            
-            <div class="section">
-                <h2 class="section-title">Faculty Coordinator</h2>
-                <div class="guest-card">
-                    <div class="guest-image">
-                        <img src="team/gupta.jpeg" alt="Chief Guest">
-                    </div>
-                    <div class="guest-name">P.S Gupta</div>
-                    <div class="guest-title"></div>
-                </div>
-            </div>
-
-             <!-- Chief Guest Section -->
-            <div class="section">
-                <h2 class="section-title">Faculty Coordinator</h2>
-                <div class="guest-card">
-                    <div class="guest-image">
-                        <img src="team/meshram.jpeg" alt="Chief Guest">
-                    </div>
-                    <div class="guest-name">R.R.Meshram</div>
-                    <div class="guest-title"></div>
-                </div>
-            </div>
-             <!-- Chief Guest Section -->
-      
         </div>
 
-       
+
     </div>
 
     <script>
@@ -977,20 +999,20 @@ COSA also focuses on overall personality development by promoting teamwork, comm
             for (let i = 0; i < numberOfStars; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
-                
+
                 const size = Math.random() * 3 + 1;
                 star.style.width = size + 'px';
                 star.style.height = size + 'px';
                 star.style.left = Math.random() * 100 + '%';
                 star.style.top = Math.random() * -50 + '%';
-                
+
                 const xMove = (Math.random() - 0.5) * 200;
                 star.style.setProperty('--x-move', xMove + 'px');
-                
+
                 const duration = Math.random() * 15 + 10;
                 star.style.animationDuration = duration + 's';
                 star.style.animationDelay = Math.random() * 5 + 's';
-                
+
                 starsLayer.appendChild(star);
             }
         }
@@ -998,4 +1020,5 @@ COSA also focuses on overall personality development by promoting teamwork, comm
         createStars();
     </script>
 </body>
+
 </html>

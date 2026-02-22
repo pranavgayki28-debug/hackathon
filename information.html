@@ -1421,7 +1421,44 @@
             </div>
         </div>
     </div>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
 
+<script type="module">
+  // Import
+  import { initializeApp } from 
+  "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+  import { getDatabase, ref, set } from
+  "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+  // Your config
+  const firebaseConfig = {
+   apiKey: "AIzaSyBaxgusaoeP1RbpFCn50O2Hhrhz--CQmbw",
+    authDomain: "campusconnect-aac19.firebaseapp.com",
+    projectId: "campusconnect-aac19",
+    storageBucket: "campusconnect-aac19.firebasestorage.app",
+    messagingSenderId: "623964953510",
+    appId: "1:623964953510:web:c848a3c7e3abd3b77c0d67"
+};
+
+  // Initialize
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+
+  // Example: Save data
+  function saveEvent() {
+    set(ref(database, 'events/event1'), {
+      name: "Hackathon",
+      date: "25 Feb 2026",
+      venue: "College Hall"
+    });
+  }
+
+  saveEvent();
+</script>
+<script type="module" src="firebase.js"></script>
     <script>
         // Generate Moving Stars
         function createStars() {
@@ -1448,6 +1485,16 @@
                 starsLayer.appendChild(star);
             }
         }
+        import { getDatabase, ref, get } from
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const db = getDatabase();
+
+get(ref(db, 'events/event1')).then((snapshot) => {
+  if (snapshot.exists()) {
+    console.log(snapshot.val());
+  }
+});
 
         // FAQ Toggle
         const faqItems = document.querySelectorAll('.faq-item');
