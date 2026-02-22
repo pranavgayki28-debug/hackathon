@@ -3,9 +3,9 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-aut
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
+  apiKey: "AIzaSyBaxgusaoeP1RbpFCn50O2Hhrhz--CQmbw",
+  authDomain: "campusconnect-aac19.firebaseapp.com",
+  projectId: "campusconnect-aac19",
 };
 
 const app = initializeApp(firebaseConfig);
