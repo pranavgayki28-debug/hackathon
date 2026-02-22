@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COSA - Gallery</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #000;
+            overflow-x: hidden;
+        }
+
+        /* Disable right-click and image dragging */
+        img {
+            pointer-events: none;
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+        }
+
+        .main-container {
+            position: relative;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0015 0%, #1a0033 50%, #0f001f 100%);
+        }
+
+        /* Background Effects */
+        .stars-layer {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: moveStar linear infinite;
+        }
+
+        @keyframes moveStar {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(100vh) translateX(var(--x-move)); opacity: 0; }
+        }
+
+        .wave-layer {
+            position: fixed;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(ellipse at 20% 30%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 70%, rgba(255, 20, 147, 0.15) 0%, transparent 50%);
+            animation: rotateWaves 30s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotateWaves {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .grid-layer {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(138, 43, 226, 0.1) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(138, 43, 226, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Header */
+        .header-nav {
+            position: relative;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 80px;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 0, 30, 0.6);
+            border-bottom: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+        }
+
+        .logo-ring {
+            width: 60px;
+            height: 60px;
+            border: 3px solid #8A2BE2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: rotate-ring 10s linear infinite;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
+        }
+
+        @keyframes rotate-ring {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .logo-inner {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #8A2BE2, #FF1493);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 20px;
+            color: white;
+        }
+
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(138, 43, 226, 0.8);
+        }
+
+        .main-nav {
+            display: flex;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .main-nav a {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .main-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #8A2BE2, #FF1493);
+            transform: translateX(-50%);
+            transition: width 0.3s;
+        }
+
+        .main-nav a:hover {
+            color: #FF1493;
+        }
+
+        .main-nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Sidebars */
+        .left-sidebar, .right-sidebar {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: rgba(10, 0, 30, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 25px 18px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .left-sidebar {
+            left: 0;
+            border-radius: 0 20px 20px 0;
+            border-left: none;
+        }
+
+        .right-sidebar {
+            right: 0;
+            border-radius: 20px 0 0 20px;
+            border-right: none;
+        }
+
+        .sidebar-icon {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.3), rgba(75, 0, 130, 0.3));
+            border: 2px solid rgba(138, 43, 226, 0.5);
+            border-radius: 12px;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.4s;
+            position: relative;
+        }
+
+        .sidebar-icon:hover {
+            background: linear-gradient(135deg, #8A2BE2, #FF1493);
+            transform: scale(1.15);
+            box-shadow: 0 5px 20px rgba(138, 43, 226, 0.6);
+        }
+
+        .left-sidebar .sidebar-icon:hover {
+            transform: translateX(8px) scale(1.15);
+        }
+
+        .right-sidebar .sidebar-icon:hover {
+            transform: translateX(-8px) scale(1.15);
+        }
+
+        .sidebar-label {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.95), rgba(75, 0, 130, 0.95));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .left-sidebar .sidebar-label {
+            left: 70px;
+            top: 50%;
+            transform: translateY(-50%) translateX(-10px);
+        }
+
+        .right-sidebar .sidebar-label {
+            right: 70px;
+            top: 50%;
+            transform: translateY(-50%) translateX(10px);
+        }
+
+        .sidebar-icon:hover .sidebar-label {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+        }
+
+        /* Gallery Content */
+        .gallery-container {
+            position: relative;
+            z-index: 10;
+            padding: 60px 80px 120px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .gallery-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 56px;
+            font-weight: 900;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 30px rgba(138, 43, 226, 0.8);
+            animation: titleFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes titleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .gallery-subtitle {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 1px;
+        }
+
+        /* Photo Grid */
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .photo-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            cursor: pointer;
+            border: 2px solid rgba(138, 43, 226, 0.3);
+            transition: all 0.4s;
+            aspect-ratio: 1;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .photo-item:hover {
+            border-color: #FF1493;
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 50px rgba(138, 43, 226, 0.6);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s;
+        }
+
+        .photo-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .photo-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            z-index: 5;
+            pointer-events: all;
+            cursor: pointer;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-image {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 20px 80px rgba(138, 43, 226, 0.8);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #8A2BE2, #FF1493);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 10001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-close:hover {
+            transform: rotate(90deg) scale(1.1);
+            box-shadow: 0 5px 20px rgba(138, 43, 226, 0.8);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.8), rgba(75, 0, 130, 0.8));
+            border: 2px solid rgba(138, 43, 226, 0.5);
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .lightbox-nav:hover {
+            background: linear-gradient(135deg, #8A2BE2, #FF1493);
+            transform: translateY(-50%) scale(1.15);
+            box-shadow: 0 5px 20px rgba(138, 43, 226, 0.8);
+        }
+
+        .lightbox-prev {
+            left: 30px;
+        }
+
+        .lightbox-next {
+            right: 30px;
+        }
+
+        .lightbox-counter {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.9), rgba(75, 0, 130, 0.9));
+            padding: 10px 25px;
+            border-radius: 30px;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            border: 2px solid rgba(138, 43, 226, 0.5);
+        }
+
+        .protection-message {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, rgba(255, 20, 147, 0.9), rgba(138, 43, 226, 0.9));
+            padding: 12px 30px;
+            border-radius: 30px;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .protection-message.show {
+            opacity: 1;
+        }
+
+        /* Loading Spinner */
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 18px;
+            padding: 40px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-nav {
+                padding: 20px 30px;
+                flex-direction: column;
+                gap: 20px;
+            }
+            .main-nav {
+                gap: 30px;
+            }
+            .gallery-container {
+                padding: 40px 20px 140px;
+            }
+            .gallery-title {
+                font-size: 36px;
+                letter-spacing: 4px;
+            }
+            .gallery-subtitle {
+                font-size: 14px;
+            }
+            .photos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+            }
+            .left-sidebar, .right-sidebar {
+                display: none;
+            }
+            .lightbox-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+            .lightbox-prev {
+                left: 15px;
+            }
+            .lightbox-next {
+                right: 15px;
+            }
+            .lightbox-counter {
+                font-size: 14px;
+                padding: 8px 20px;
+            }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+    <div class="main-container">
+        <!-- Background Effects -->
+        <div class="stars-layer" id="starsLayer"></div>
+        <div class="wave-layer"></div>
+        <div class="grid-layer"></div>
+
+        <!-- Header -->
+        <nav class="header-nav">
+            <div class="logo-container" onclick="window.location.href='index.html'">
+                <div class="logo-ring">
+                    <div class="logo-inner">C</div>
+                </div>
+                <div class="logo-text">COSA</div>
+            </div>
+            <div class="main-nav">
+                <a href="event.html">EVENTS</a>
+                <a href="winners.html">WINNERS</a>
+            </div>
+        </nav>
+
+        <!-- Left Sidebar -->
+        <div class="left-sidebar">
+            <div class="sidebar-icon" onclick="window.location.href='index.html'">
+                <i class="fas fa-home"></i>
+                <span class="sidebar-label">Home</span>
+            </div>
+            <div class="sidebar-icon" onclick="window.location.href='gallery.html'">
+                <i class="fas fa-trophy"></i>
+                <span class="sidebar-label">Gallery</span>
+            </div>
+            <div class="sidebar-icon" onclick="window.location.href='about.html'">
+                <i class="fas fa-info-circle"></i>
+                <span class="sidebar-label">About Us</span>
+            </div>
+            <div class="sidebar-icon" onclick="window.location.href='team.html'">
+                <i class="fas fa-users"></i>
+                <span class="sidebar-label">Team</span>
+            </div>
+        </div>
+
+       
+        <!-- Right Sidebar -->
+        <div class="right-sidebar">
+    <a href="https://www.youtube.com/@Cosa_gpy" target="_blank">
+    <div class="sidebar-icon">
+        <i class="fab fa-youtube"></i>
+        <span class="sidebar-label">YouTube</span>
+    </div>
+</a>     <a href="https://www.instagram.com/computer_wale_gpy?igsh=cW9vc3Y5NDZtNDY1" target="_blank">
+    <div class="sidebar-icon">
+        <i class="fab fa-instagram"></i>
+        <span class="sidebar-label">Instagram</span>
+    </div>
+</a>
+       
+           <a href="https://www.facebook.com/share/1AAisLXPTC/" target="_blank">
+    <div class="sidebar-icon">
+        <i class="fab fa-facebook"></i>
+        <span class="sidebar-label">Facebook</span>
+    </div>
+</a>
+           <a href="https://gpyavatmal.ac.in/gpy/" target="_blank">
+    <div class="sidebar-icon">
+        <i class="fas fa-globe"></i>
+        <span class="sidebar-label">Website </span>
+    </div>
+</a>
+        </div>
+
+        <!-- Gallery Content -->
+        <div class="gallery-container">
+            <div class="gallery-header">
+                <h1 class="gallery-title">GALLERY</h1>
+                <p class="gallery-subtitle">Relive our amazing moments</p>
+            </div>
+<center><h1 >Photos are Uploaded Soon...</h1></center>
+            <!-- Photos Grid -->
+            <div class="photos-grid" id="photosGrid">
+                <!-- Photos will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Lightbox -->
+        <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+            <button class="lightbox-close" onclick="closeLightbox()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="protection-message" id="protectionMessage">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <button class="lightbox-nav lightbox-prev" onclick="event.stopPropagation(); prevImage()">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="lightbox-content" onclick="event.stopPropagation()">
+                <img src="" alt="" class="lightbox-image" id="lightboxImage">
+            </div>
+            <button class="lightbox-nav lightbox-next" onclick="event.stopPropagation(); nextImage()">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <div class="lightbox-counter" id="lightboxCounter">1 / 10</div>
+        </div>
+    </div>
+
+    <script>
+        // Sample Photos Array - REPLACE WITH YOUR ACTUAL PHOTOS
+        const photos = [
+            // "team/bahale.jpeg",
+          
+            
+        ];
+
+        let currentImageIndex = 0;
+
+        // Create Stars
+        function createStars() {
+            const starsLayer = document.getElementById('starsLayer');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * -50 + '%';
+                const xMove = (Math.random() - 0.5) * 200;
+                star.style.setProperty('--x-move', xMove + 'px');
+                star.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                star.style.animationDelay = Math.random() * 5 + 's';
+                starsLayer.appendChild(star);
+            }
+        }
+
+        // Load Photos into Grid
+        function loadPhotos() {
+            const photosGrid = document.getElementById('photosGrid');
+            photosGrid.innerHTML = '';
+            
+            photos.forEach((photo, index) => {
+                const photoItem = document.createElement('div');
+                photoItem.className = 'photo-item';
+                
+                photoItem.innerHTML = `
+                    <img src="${photo}" alt="Gallery Photo ${index + 1}">
+                    <div class="photo-overlay" onclick="openLightbox(${index})"></div>
+                `;
+                
+                photosGrid.appendChild(photoItem);
+            });
+        }
+
+        // Open Lightbox
+        function openLightbox(index) {
+            currentImageIndex = index;
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImage = document.getElementById('lightboxImage');
+            const counter = document.getElementById('lightboxCounter');
+            
+            lightboxImage.src = photos[index];
+            counter.textContent = `${index + 1} / ${photos.length}`;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Show protection message briefly
+            showProtectionMessage();
+        }
+
+        // Close Lightbox
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Next Image
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % photos.length;
+            document.getElementById('lightboxImage').src = photos[currentImageIndex];
+            document.getElementById('lightboxCounter').textContent = `${currentImageIndex + 1} / ${photos.length}`;
+        }
+
+        // Previous Image
+        function prevImage() {
+            currentImageIndex = (currentImageIndex - 1 + photos.length) % photos.length;
+            document.getElementById('lightboxImage').src = photos[currentImageIndex];
+            document.getElementById('lightboxCounter').textContent = `${currentImageIndex + 1} / ${photos.length}`;
+        }
+
+        // Show Protection Message
+        function showProtectionMessage() {
+            const message = document.getElementById('protectionMessage');
+            message.classList.add('show');
+            setTimeout(() => {
+                message.classList.remove('show');
+            }, 3000);
+        }
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('lightbox').classList.contains('active')) {
+                if (e.key === 'ArrowRight') nextImage();
+                if (e.key === 'ArrowLeft') prevImage();
+                if (e.key === 'Escape') closeLightbox();
+            }
+        });
+
+        // PROTECTION: Disable right-click
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            showProtectionMessage();
+            return false;
+        });
+
+        // PROTECTION: Disable image dragging
+        document.addEventListener('dragstart', (e) => {
+            e.preventDefault();
+            return false;
+        });
+
+        // PROTECTION: Disable screenshot shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Disable Ctrl+S, Ctrl+Shift+S, Print Screen
+            if ((e.ctrlKey && e.key === 's') || 
+                (e.ctrlKey && e.shiftKey && e.key === 'S') ||
+                (e.metaKey && e.key === 's') ||
+                e.key === 'PrintScreen') {
+                e.preventDefault();
+                showProtectionMessage();
+                return false;
+            }
+            
+            // Disable F12 (Developer Tools)
+            if (e.key === 'F12') {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+Shift+I (Developer Tools)
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // PROTECTION: Detect screenshot on Print Screen
+        document.addEventListener('keyup', (e) => {
+            if (e.key === 'PrintScreen') {
+                navigator.clipboard.writeText('');
+                showProtectionMessage();
+            }
+        });
+
+        // Initialize
+        createStars();
+        loadPhotos();
+    </script>
+</body>
+</html>

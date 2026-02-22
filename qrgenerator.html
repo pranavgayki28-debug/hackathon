@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Student QR Codes</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0015 0%, #1a0033 50%, #0f001f 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(10, 0, 30, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            padding: 40px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 0%, #8A2BE2 50%, #FF1493 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid rgba(138, 43, 226, 0.3);
+            border-radius: 10px;
+            background: rgba(10, 0, 30, 0.6);
+            color: white;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #8A2BE2;
+            box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.2);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.4s;
+            background: linear-gradient(135deg, #8A2BE2 0%, #6d28d9 100%);
+            color: white;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(138, 43, 226, 0.6);
+        }
+
+        .qr-display {
+            text-align: center;
+            margin-top: 30px;
+            padding: 30px;
+            background: rgba(138, 43, 226, 0.1);
+            border: 2px solid rgba(138, 43, 226, 0.3);
+            border-radius: 15px;
+            display: none;
+        }
+
+        #qrcode {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        .qr-info {
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 20px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            margin-top: 20px;
+        }
+
+        .link-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .link-container a {
+            color: #8A2BE2;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .link-container a:hover {
+            color: #FF1493;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>🎫 Generate QR Code</h1>
+        <p class="subtitle">Create QR codes for students</p>
+
+        <div class="form-group">
+            <label>Student Name *</label>
+            <input type="text" id="studentName" placeholder="Enter student full name" required>
+        </div>
+
+        <div class="form-group">
+            <label>Roll Number / Student ID</label>
+            <input type="text" id="rollNumber" placeholder="Optional">
+        </div>
+
+        <div class="form-group">
+            <label>Event Name</label>
+            <select id="eventSelect">
+                <option value="TechnoVate 2026">TechnoVate 2026</option>
+                <option value="Hackathon">Hackathon</option>
+                <option value="Project Expo">Project Expo</option>
+                <option value="Workshop">Workshop</option>
+                <option value="Seminar">Seminar</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <button class="btn" onclick="generateQR()">🎫 Generate QR Code</button>
+
+        <div class="qr-display" id="qrDisplay">
+            <div id="qrcode"></div>
+            <div class="qr-info" id="qrInfo"></div>
+            <button class="btn btn-download" onclick="downloadQR()">📥 Download QR Code</button>
+        </div>
+
+        <div class="link-container">
+            <a href="attendance.html">← Back to Attendance Scanner</a>
+        </div>
+    </div>
+
+    <script>
+        let currentQRData = null;
+
+        function generateQR() {
+            const name = document.getElementById('studentName').value.trim();
+            const rollNo = document.getElementById('rollNumber').value.trim();
+            const event = document.getElementById('eventSelect').value;
+
+            if (!name) {
+                alert('Please enter student name');
+                return;
+            }
+
+            const qrData = {
+                name: name,
+                rollNo: rollNo,
+                event: event,
+                id: Date.now()
+            };
+
+            currentQRData = qrData;
+            const qrString = JSON.stringify(qrData);
+
+            // Clear previous QR
+            document.getElementById('qrcode').innerHTML = '';
+
+            // Generate new QR
+            QRCode.toCanvas(document.createElement('canvas'), qrString, {
+                width: 300,
+                margin: 2,
+                color: {
+                    dark: '#000000',
+                    light: '#ffffff'
+                }
+            }, function (error, canvas) {
+                if (error) {
+                    console.error(error);
+                    alert('Error generating QR code');
+                    return;
+                }
+                document.getElementById('qrcode').innerHTML = '';
+                document.getElementById('qrcode').appendChild(canvas);
+                
+                // Update info
+                let info = `<strong>${name}</strong>`;
+                if (rollNo) info += `<br>Roll: ${rollNo}`;
+                info += `<br>Event: ${event}`;
+                document.getElementById('qrInfo').innerHTML = info;
+                
+                // Show display
+                document.getElementById('qrDisplay').style.display = 'block';
+            });
+        }
+
+        function downloadQR() {
+            if (!currentQRData) return;
+
+            const canvas = document.querySelector('#qrcode canvas');
+            if (!canvas) return;
+
+            const link = document.createElement('a');
+            link.download = `QR_${currentQRData.name.replace(/\s+/g, '_')}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+    </script>
+</body>
+</html>
