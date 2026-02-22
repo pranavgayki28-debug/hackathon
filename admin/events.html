@@ -126,86 +126,132 @@ button {
 
 </div>
 
-<script>
+<script type="module">
 
-let events = JSON.parse(localStorage.getItem("events")) || [];
+import { db, storage } from "./firebase.js";
+
+import {
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+  updateDoc
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
 const form = document.getElementById("eventForm");
 const grid = document.getElementById("eventsGrid");
 
-function saveToStorage(){
-    localStorage.setItem("events", JSON.stringify(events));
+let editId = null;
+
+/* ================= LOAD EVENTS ================= */
+
+async function loadEvents() {
+  grid.innerHTML = "";
+
+  const querySnapshot = await getDocs(collection(db, "events"));
+
+  querySnapshot.forEach((document) => {
+    const event = document.data();
+
+    grid.innerHTML += `
+      <div class="event-card">
+          <img src="${event.image}">
+          <div class="event-name">
+              ${event.name}<br>
+              <small>${event.date}</small>
+          </div>
+          <div class="action-buttons">
+              <button class="edit-btn" onclick="editEvent('${document.id}','${event.name}','${event.date}')">Edit</button>
+              <button class="delete-btn" onclick="deleteEvent('${document.id}','${event.image}')">Delete</button>
+          </div>
+      </div>
+    `;
+  });
 }
 
-function renderEvents(){
-    grid.innerHTML = "";
-    events.forEach((event, index) => {
-        grid.innerHTML += `
-        <div class="event-card">
-            <img src="${event.image}">
-            <div class="event-name">${event.name}<br><small>${event.date}</small></div>
-            <div class="action-buttons">
-                <button class="edit-btn" onclick="editEvent(${index})">Edit</button>
-                <button class="delete-btn" onclick="deleteEvent(${index})">Delete</button>
-            </div>
-        </div>`;
+window.loadEvents = loadEvents;
+
+/* ================= ADD / UPDATE EVENT ================= */
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById("eventName").value;
+  const date = document.getElementById("eventDate").value;
+  const file = document.getElementById("thumbnail").files[0];
+
+  let imageUrl = "";
+
+  if (file) {
+    const storageRef = ref(storage, "events/" + file.name);
+    await uploadBytes(storageRef, file);
+    imageUrl = await getDownloadURL(storageRef);
+  }
+
+  if (editId) {
+    await updateDoc(doc(db, "events", editId), {
+      name,
+      date,
+      image: imageUrl
     });
-}
 
-function deleteEvent(index){
-    if(confirm("Delete this event?")){
-        events.splice(index,1);
-        saveToStorage();
-        renderEvents();
+    editId = null;
+    document.getElementById("formTitle").innerText = "Add Event";
+
+  } else {
+
+    if (!imageUrl) {
+      alert("Please upload image");
+      return;
     }
-}
 
-function editEvent(index){
-    document.getElementById("formTitle").innerText = "Edit Event";
-    document.getElementById("eventName").value = events[index].name;
-    document.getElementById("eventDate").value = events[index].date;
-    document.getElementById("editIndex").value = index;
-}
+    await addDoc(collection(db, "events"), {
+      name,
+      date,
+      image: imageUrl,
+      createdAt: new Date()
+    });
+  }
 
-form.addEventListener("submit", function(e){
-    e.preventDefault();
-
-    const name = document.getElementById("eventName").value;
-    const date = document.getElementById("eventDate").value;
-    const file = document.getElementById("thumbnail").files[0];
-    const editIndex = document.getElementById("editIndex").value;
-
-    if(file){
-        const reader = new FileReader();
-        reader.onload = function(){
-            saveEvent(name, date, reader.result, editIndex);
-        };
-        reader.readAsDataURL(file);
-    } else {
-        if(editIndex !== ""){
-            saveEvent(name, date, events[editIndex].image, editIndex);
-        } else {
-            alert("Please upload image");
-        }
-    }
+  form.reset();
+  loadEvents();
 });
 
-function saveEvent(name, date, image, editIndex){
-    if(editIndex !== ""){
-        events[editIndex] = {name, date, image};
-    } else {
-        events.push({name, date, image});
-    }
+/* ================= DELETE ================= */
 
-    saveToStorage();
-    renderEvents();
-    form.reset();
-    document.getElementById("editIndex").value = "";
-    document.getElementById("formTitle").innerText = "Add Event";
-}
+window.deleteEvent = async (id, imageUrl) => {
 
-renderEvents();
+  if (!confirm("Delete this event?")) return;
+
+  await deleteDoc(doc(db, "events", id));
+
+  // Delete image from storage
+  const imageRef = ref(storage, imageUrl);
+  await deleteObject(imageRef);
+
+  loadEvents();
+};
+
+/* ================= EDIT ================= */
+
+window.editEvent = (id, name, date) => {
+  editId = id;
+
+  document.getElementById("formTitle").innerText = "Edit Event";
+  document.getElementById("eventName").value = name;
+  document.getElementById("eventDate").value = date;
+};
+
+loadEvents();
 
 </script>
-
 </body>
 </html>
