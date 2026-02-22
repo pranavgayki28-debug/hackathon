@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance - QR Scanner</title>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0015 0%, #1a0033 50%, #0f001f 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 20, 147, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(10, 0, 30, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(138, 43, 226, 0.3);
+            padding: 40px;
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 0%, #8A2BE2 50%, #FF1493 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        /* QR Scanner Section */
+        .qr-section {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.1) 0%, rgba(75, 0, 130, 0.1) 100%);
+            border: 2px solid rgba(138, 43, 226, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        #reader {
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 0 auto;
+            max-width: 500px;
+            background: white;
+        }
+
+        .scan-status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            display: none;
+        }
+
+        .scan-status.success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 2px solid rgba(16, 185, 129, 0.4);
+            color: #10b981;
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        .scan-status.error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 2px solid rgba(239, 68, 68, 0.4);
+            color: #ef4444;
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stats Section */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.2) 0%, rgba(75, 0, 130, 0.2) 100%);
+            border: 2px solid rgba(138, 43, 226, 0.4);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3em;
+            font-weight: 900;
+            color: #8A2BE2;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Attendance List Section */
+        .attendance-section {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.1) 0%, rgba(75, 0, 130, 0.1) 100%);
+            border: 2px solid rgba(138, 43, 226, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .section-title {
+            color: #ffffff;
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(138, 43, 226, 0.6);
+            text-align: center;
+        }
+
+        .attendance-list {
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .attendance-item {
+            background: rgba(138, 43, 226, 0.15);
+            border: 2px solid rgba(138, 43, 226, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .attendance-item:hover {
+            background: rgba(138, 43, 226, 0.25);
+            transform: translateX(10px);
+            border-color: #8A2BE2;
+        }
+
+        .attendance-content {
+            flex: 1;
+        }
+
+        .attendance-name {
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.4em;
+            margin-bottom: 5px;
+        }
+
+        .attendance-details {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95em;
+        }
+
+        .attendance-time {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+
+        .attendance-icon {
+            font-size: 2.5em;
+            color: #10b981;
+            animation: checkmark 0.5s ease;
+        }
+
+        @keyframes checkmark {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.1em;
+        }
+
+        .empty-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        /* Scrollbar */
+        .attendance-list::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .attendance-list::-webkit-scrollbar-track {
+            background: rgba(10, 0, 30, 0.5);
+            border-radius: 10px;
+        }
+
+        .attendance-list::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #8A2BE2, #FF1493);
+            border-radius: 10px;
+        }
+
+        .attendance-list::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #7c3aed, #ec4899);
+        }
+
+        /* Buttons */
+        .btn-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.4s;
+            margin: 5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: 2px solid rgba(16, 185, 129, 0.5);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.6);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: 2px solid rgba(239, 68, 68, 0.5);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(239, 68, 68, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .attendance-name {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>📋 Attendance System</h1>
+        <p class="subtitle">QR Code Based Attendance Tracking</p>
+
+        <!-- QR Scanner Section -->
+        <div class="qr-section">
+            <div id="reader"></div>
+            <div id="scanStatus" class="scan-status"></div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="todayCount">0</div>
+                <div class="stat-label">Today's Attendance</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalCount">0</div>
+                <div class="stat-label">Total Students</div>
+            </div>
+        </div>
+
+        <!-- Attendance List -->
+        <div class="attendance-section">
+            <h2 class="section-title">✅ Present Students</h2>
+            <div class="attendance-list" id="attendanceList">
+                <div class="empty-state">
+                    <div class="empty-icon">📝</div>
+                    <p>No students scanned yet</p>
+                    <p style="font-size: 0.9em; margin-top: 10px;">Scan QR codes to mark attendance</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="btn-container">
+            <button class="btn btn-primary" onclick="exportAttendance()">📊 Export to CSV</button>
+            <button class="btn btn-danger" onclick="clearAttendance()">🗑️ Clear All</button>
+        </div>
+    </div>
+
+    <script>
+        let html5QrCode;
+        let attendanceData = JSON.parse(localStorage.getItem('attendanceData')) || [];
+
+        // Initialize scanner
+        function startScanner() {
+            html5QrCode = new Html5Qrcode("reader");
+            
+            html5QrCode.start(
+                { facingMode: "environment" },
+                {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 }
+                },
+                onScanSuccess,
+                onScanError
+            ).catch(err => {
+                console.error("Camera error:", err);
+                showStatus('Camera not available. Please check permissions.', 'error');
+            });
+        }
+
+        function onScanSuccess(decodedText, decodedResult) {
+            try {
+                const data = JSON.parse(decodedText);
+                
+                // Check if already marked today
+                const today = new Date().toDateString();
+                const alreadyMarked = attendanceData.some(item => 
+                    item.name === data.name && 
+                    new Date(item.timestamp).toDateString() === today
+                );
+
+                if (alreadyMarked) {
+                    showStatus(`⚠️ ${data.name} already marked present today!`, 'error');
+                    return;
+                }
+
+                // Mark attendance
+                const attendance = {
+                    name: data.name,
+                    rollNo: data.rollNo || '',
+                    event: data.event || '',
+                    timestamp: new Date().toISOString()
+                };
+
+                attendanceData.unshift(attendance); // Add to beginning
+                localStorage.setItem('attendanceData', JSON.stringify(attendanceData));
+
+                // Show success
+                showStatus(`✅ ${data.name} marked present!`, 'success');
+                
+                // Update display
+                updateStats();
+                displayAttendance();
+
+                // Play success sound (optional)
+                playSuccessSound();
+
+            } catch (error) {
+                console.error('QR scan error:', error);
+                showStatus('❌ Invalid QR Code', 'error');
+            }
+        }
+
+        function onScanError(errorMessage) {
+            // Ignore scan errors (too noisy)
+        }
+
+        function showStatus(message, type) {
+            const status = document.getElementById('scanStatus');
+            status.textContent = message;
+            status.className = `scan-status ${type}`;
+            
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 3000);
+        }
+
+        function playSuccessSound() {
+            // Create a simple beep sound
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.2);
+        }
+
+        function updateStats() {
+            const today = new Date().toDateString();
+            const todayCount = attendanceData.filter(a => 
+                new Date(a.timestamp).toDateString() === today
+            ).length;
+
+            document.getElementById('todayCount').textContent = todayCount;
+            document.getElementById('totalCount').textContent = attendanceData.length;
+        }
+
+        function displayAttendance() {
+            const list = document.getElementById('attendanceList');
+            
+            if (attendanceData.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📝</div>
+                        <p>No students scanned yet</p>
+                        <p style="font-size: 0.9em; margin-top: 10px;">Scan QR codes to mark attendance</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = attendanceData.map(item => {
+                const date = new Date(item.timestamp);
+                const timeStr = date.toLocaleTimeString();
+                const dateStr = date.toLocaleDateString();
+                
+                return `
+                    <div class="attendance-item">
+                        <div class="attendance-content">
+                            <div class="attendance-name">${item.name}</div>
+                            <div class="attendance-details">
+                                ${item.rollNo ? `Roll: ${item.rollNo}` : ''}
+                                ${item.rollNo && item.event ? ' • ' : ''}
+                                ${item.event ? `Event: ${item.event}` : ''}
+                            </div>
+                            <div class="attendance-time">${dateStr} at ${timeStr}</div>
+                        </div>
+                        <div class="attendance-icon">✓</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function exportAttendance() {
+            if (attendanceData.length === 0) {
+                showStatus('⚠️ No attendance data to export', 'error');
+                return;
+            }
+
+            let csv = 'Name,Roll Number,Event,Date,Time\n';
+            
+            attendanceData.forEach(item => {
+                const date = new Date(item.timestamp);
+                csv += `"${item.name}","${item.rollNo || 'N/A'}","${item.event || 'N/A'}","${date.toLocaleDateString()}","${date.toLocaleTimeString()}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `Attendance_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+            URL.revokeObjectURL(url);
+
+            showStatus('✅ Attendance exported successfully!', 'success');
+        }
+
+        function clearAttendance() {
+            if (attendanceData.length === 0) {
+                showStatus('⚠️ No attendance data to clear', 'error');
+                return;
+            }
+
+            if (confirm('Are you sure you want to clear all attendance data?')) {
+                attendanceData = [];
+                localStorage.setItem('attendanceData', JSON.stringify(attendanceData));
+                displayAttendance();
+                updateStats();
+                showStatus('🗑️ All attendance data cleared', 'success');
+            }
+        }
+
+        // Initialize
+        startScanner();
+        updateStats();
+        displayAttendance();
+    </script>
+</body>
+</html>

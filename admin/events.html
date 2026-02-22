@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Manage Events</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+    background: linear-gradient(135deg, #0a0015 0%, #1a0033 50%, #0f001f 100%);
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    padding: 40px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+.form-box {
+    background: rgba(10, 0, 30, 0.8);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 0 40px rgba(138, 43, 226, 0.6);
+    margin-bottom: 60px;
+}
+
+.form-box h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+input, button {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    border: none;
+}
+
+input {
+    background: rgba(255,255,255,0.05);
+    color: white;
+    border: 1px solid rgba(138,43,226,0.5);
+}
+
+button {
+    background: linear-gradient(90deg, #8A2BE2, #FF1493);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.event-card {
+    background: rgba(10, 0, 30, 0.8);
+    border-radius: 20px;
+    overflow: hidden;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(138,43,226,0.5);
+}
+
+.event-card img {
+    width: 100%;
+    height: 300px;
+    object-fit: contain;
+    background: rgba(255,255,255,0.05);
+}
+
+.event-name {
+    padding: 15px;
+    font-weight: 600;
+}
+
+.action-buttons {
+    display: flex;
+}
+
+.action-buttons button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.edit-btn { background: #4CAF50; }
+.delete-btn { background: #e91e63; }
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="form-box">
+    <h2 id="formTitle">Add Event</h2>
+
+    <form id="eventForm">
+        <input type="hidden" id="editIndex">
+
+        <input type="text" id="eventName"
+               placeholder="Event Name"
+               required>
+
+        <input type="text" id="eventDate"
+               placeholder="Event Date (e.g. 16 January 2026 or Online Competition)"
+               required>
+
+        <input type="file" id="thumbnail" accept="image/*">
+
+        <button type="submit">Save Event</button>
+    </form>
+</div>
+
+<h2 style="margin-bottom:30px;">All Events</h2>
+
+<div class="events-grid" id="eventsGrid"></div>
+
+</div>
+
+<script>
+
+let events = JSON.parse(localStorage.getItem("events")) || [];
+const form = document.getElementById("eventForm");
+const grid = document.getElementById("eventsGrid");
+
+function saveToStorage(){
+    localStorage.setItem("events", JSON.stringify(events));
+}
+
+function renderEvents(){
+    grid.innerHTML = "";
+    events.forEach((event, index) => {
+        grid.innerHTML += `
+        <div class="event-card">
+            <img src="${event.image}">
+            <div class="event-name">${event.name}<br><small>${event.date}</small></div>
+            <div class="action-buttons">
+                <button class="edit-btn" onclick="editEvent(${index})">Edit</button>
+                <button class="delete-btn" onclick="deleteEvent(${index})">Delete</button>
+            </div>
+        </div>`;
+    });
+}
+
+function deleteEvent(index){
+    if(confirm("Delete this event?")){
+        events.splice(index,1);
+        saveToStorage();
+        renderEvents();
+    }
+}
+
+function editEvent(index){
+    document.getElementById("formTitle").innerText = "Edit Event";
+    document.getElementById("eventName").value = events[index].name;
+    document.getElementById("eventDate").value = events[index].date;
+    document.getElementById("editIndex").value = index;
+}
+
+form.addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const name = document.getElementById("eventName").value;
+    const date = document.getElementById("eventDate").value;
+    const file = document.getElementById("thumbnail").files[0];
+    const editIndex = document.getElementById("editIndex").value;
+
+    if(file){
+        const reader = new FileReader();
+        reader.onload = function(){
+            saveEvent(name, date, reader.result, editIndex);
+        };
+        reader.readAsDataURL(file);
+    } else {
+        if(editIndex !== ""){
+            saveEvent(name, date, events[editIndex].image, editIndex);
+        } else {
+            alert("Please upload image");
+        }
+    }
+});
+
+function saveEvent(name, date, image, editIndex){
+    if(editIndex !== ""){
+        events[editIndex] = {name, date, image};
+    } else {
+        events.push({name, date, image});
+    }
+
+    saveToStorage();
+    renderEvents();
+    form.reset();
+    document.getElementById("editIndex").value = "";
+    document.getElementById("formTitle").innerText = "Add Event";
+}
+
+renderEvents();
+
+</script>
+
+</body>
+</html>

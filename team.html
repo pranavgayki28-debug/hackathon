@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COSA - Team</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #000;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background - Same as original */
+        .main-container {
+            position: relative;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0015 0%, #1a0033 50%, #0f001f 100%);
+            overflow-x: hidden;
+        }
+
+        .stars-layer {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: moveStar linear infinite;
+        }
+
+        @keyframes moveStar {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) translateX(var(--x-move));
+                opacity: 0;
+            }
+        }
+
+        .wave-layer {
+            position: fixed;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(255, 20, 147, 0.15) 0%, transparent 50%);
+            animation: rotateWaves 30s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotateWaves {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .grid-layer {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(138, 43, 226, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(138, 43, 226, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .nebula {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: float-nebula 20s infinite ease-in-out;
+            z-index: 0;
+        }
+
+        @keyframes float-nebula {
+            0% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(100px, -80px) scale(1.2); }
+            50% { transform: translate(-80px, 100px) scale(0.8); }
+            75% { transform: translate(120px, 50px) scale(1.1); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+
+        /* Header Navigation - Same as original */
+        .header-nav {
+            position: relative;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 80px;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 0, 30, 0.6);
+            border-bottom: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .logo-container:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-ring {
+            width: 60px;
+            height: 60px;
+            border: 3px solid #8A2BE2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: rotate-ring 10s linear infinite;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
+        }
+
+        @keyframes rotate-ring {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .logo-inner {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #8A2BE2, #FF1493);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 20px;
+            color: white;
+        }
+
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(138, 43, 226, 0.8);
+        }
+
+        .main-nav {
+            display: flex;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .main-nav a {
+            font-family: 'Poppins', sans-serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+            padding: 8px 0;
+            transition: all 0.4s;
+        }
+
+        .main-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #8A2BE2, #FF1493);
+            transform: translateX(-50%);
+            transition: width 0.4s;
+        }
+
+        .main-nav a:hover {
+            color: #FF1493;
+            text-shadow: 0 0 15px rgba(255, 20, 147, 0.6);
+        }
+
+        .main-nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Sidebars - Same as original */
+        .left-sidebar, .right-sidebar {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: rgba(10, 0, 30, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 25px 18px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .left-sidebar {
+            left: 0;
+            border-radius: 0 20px 20px 0;
+            border-left: none;
+        }
+
+        .right-sidebar {
+            right: 0;
+            border-radius: 20px 0 0 20px;
+            border-right: none;
+        }
+
+        .sidebar-icon {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.3), rgba(75, 0, 130, 0.3));
+            border: 2px solid rgba(138, 43, 226, 0.5);
+            border-radius: 12px;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.4s;
+            position: relative;
+        }
+
+        .sidebar-icon:hover {
+            background: linear-gradient(135deg, #8A2BE2, #FF1493);
+            border-color: white;
+            transform: scale(1.15);
+            box-shadow: 0 5px 20px rgba(138, 43, 226, 0.6);
+        }
+
+        .left-sidebar .sidebar-icon:hover {
+            transform: translateX(8px) scale(1.15);
+        }
+
+        .right-sidebar .sidebar-icon:hover {
+            transform: translateX(-8px) scale(1.15);
+        }
+
+        .sidebar-label {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.95), rgba(75, 0, 130, 0.95));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 5px 20px rgba(138, 43, 226, 0.6);
+            z-index: 1000;
+        }
+
+        .left-sidebar .sidebar-label {
+            left: 70px;
+            top: 50%;
+            transform: translateY(-50%) translateX(-10px);
+        }
+
+        .right-sidebar .sidebar-label {
+            right: 70px;
+            top: 50%;
+            transform: translateY(-50%) translateX(10px);
+        }
+
+        .sidebar-icon:hover .sidebar-label {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+        }
+
+        /* Team Content */
+        .team-container {
+            position: relative;
+            z-index: 10;
+            padding: 60px 100px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .team-section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 42px;
+            font-weight: 800;
+            color: white;
+            text-align: center;
+            margin-bottom: 50px;
+            text-shadow: 0 0 20px rgba(138, 43, 226, 0.6);
+            letter-spacing: 2px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            justify-items: center;
+        }
+
+        .member-card {
+            position: relative;
+            width: 280px;
+            background: linear-gradient(135deg, rgba(30, 20, 60, 0.8), rgba(20, 10, 40, 0.9));
+            border: 2px solid rgba(138, 43, 226, 0.4);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.4s;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(138, 43, 226, 0.2);
+        }
+
+        .member-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 30px;
+            background: linear-gradient(135deg, #8A2BE2, #FF1493);
+            border-radius: 0 0 15px 15px;
+            opacity: 0.7;
+        }
+
+        .member-card:hover {
+            transform: translateY(-10px);
+            border-color: #FF1493;
+            box-shadow: 0 15px 50px rgba(138, 43, 226, 0.5);
+        }
+
+        .member-photo {
+            width: 230px;
+            height: 280px;
+            border-radius: 15px;
+            margin: 20px auto 20px;
+            overflow: hidden;
+            border: 3px solid rgba(138, 43, 226, 0.5);
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+        }
+
+        .member-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .member-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .member-role {
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-icon {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(138, 43, 226, 0.3);
+            border: 1px solid rgba(138, 43, 226, 0.5);
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .social-icon:hover {
+            background: linear-gradient(135deg, #8A2BE2, #FF1493);
+            border-color: white;
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .team-container {
+                padding: 40px 60px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-nav {
+                padding: 20px 30px;
+                flex-direction: column;
+                gap: 20px;
+            }
+            .main-nav {
+                gap: 30px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .main-nav a {
+                font-size: 16px;
+            }
+            .team-container {
+                padding: 30px 20px;
+            }
+            .section-title {
+                font-size: 32px;
+            }
+            .team-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .left-sidebar, .right-sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="css/mobile.css">
+    <div class="main-container">
+        <!-- Animated Background -->
+        <div class="stars-layer" id="starsLayer"></div>
+        <div class="wave-layer"></div>
+        <div class="grid-layer"></div>
+        
+        <!-- Nebula Effects -->
+        <div class="nebula" style="width: 400px; height: 400px; background: radial-gradient(circle, rgba(138, 43, 226, 0.4), transparent); top: 10%; left: 10%;"></div>
+        <div class="nebula" style="width: 500px; height: 500px; background: radial-gradient(circle, rgba(255, 20, 147, 0.3), transparent); top: 50%; right: 10%;"></div>
+        <div class="nebula" style="width: 350px; height: 350px; background: radial-gradient(circle, rgba(75, 0, 130, 0.4), transparent); bottom: 10%; left: 50%;"></div>
+
+        <!-- Header Navigation -->
+        <nav class="header-nav">
+            <div class="logo-container">
+                <div class="logo-ring">
+                    <div class="logo-inner">C</div>
+                </div>
+                <div class="logo-text">COSA</div>
+            </div>
+            <div class="main-nav">
+                <a href="event.html">EVENTS</a>
+
+                <a href="winners.html">WINNERS</a>
+            </div>
+        </nav>
+
+        <!-- Left Sidebar -->
+        <div class="left-sidebar">
+             <div class="sidebar-icon"  onclick="window.location.href='index.html'">
+                <i class="fas fa-home"></i>
+                <span class="sidebar-label">Home</span>
+            </div>
+         
+            <div class="sidebar-icon" onclick="window.location.href='gallery.html'">
+                <i class="fas fa-trophy"></i>
+                <span class="sidebar-label">Gallery</span>
+            </div>
+            <div class="sidebar-icon" onclick="window.location.href='about.html'">
+                <i class="fas fa-info-circle"></i>
+                <span class="sidebar-label">About Us</span>
+            </div>
+            <div class="sidebar-icon" onclick="window.location.href='team.html'">
+                <i class="fas fa-users"></i>
+                <span class="sidebar-label">Team</span>
+            </div>
+        </div>
+
+    <!-- Right Sidebar -->
+        <div class="right-sidebar">
+    <a href="https://www.youtube.com/@Cosa_gpy" target="_blank">
+    <div class="sidebar-icon">
+        <i class="fab fa-youtube"></i>
+        <span class="sidebar-label">YouTube</span>
+    </div>
+</a>     <a href="https://www.instagram.com/computer_wale_gpy?igsh=cW9vc3Y5NDZtNDY1" target="_blank">
+    <div class="sidebar-icon">
+        <i class="fab fa-instagram"></i>
+        <span class="sidebar-label">Instagram</span>
+    </div>
+</a>
+       
+           <a href="https://www.facebook.com/share/1AAisLXPTC/" target="_blank">
+    <div class="sidebar-icon">
+        <i class="fab fa-facebook"></i>
+        <span class="sidebar-label">Facebook</span>
+    </div>
+</a>
+           <a href="https://gpyavatmal.ac.in/gpy/" target="_blank">
+    <div class="sidebar-icon">
+        <i class="fas fa-globe"></i>
+        <span class="sidebar-label">Website </span>
+    </div>
+</a>
+        </div>
+        <!-- Team Content -->
+        <div class="team-container">
+            <!-- Faculty Mentors -->
+            <div class="team-section">
+                <h2 class="section-title">PRESIDENT</h2>
+                <div class="team-grid">
+                    <div class="member-card">
+                        <div class="member-photo">
+                            <img src="team/kar1.png" alt="Dr. Manoj V. Zambare">
+                        </div>
+                        <h3 class="member-name">Atharva Karule</h3>
+                        <p class="member-role"></p>
+                        <div class="social-links">
+                            <div class="social-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="social-icon"><i class="fab fa-linkedin"></i></div>
+                        </div>
+                    </div>
+                    <div class="member-card">
+                        <div class="member-photo">
+                            <img src="team/nilima.png" alt="Dr. Deepali K. Borade">
+                        </div>
+                        <h3 class="member-name">Nilima Kakde</h3>
+                        <p class="member-role"></p>
+                        <div class="social-links">
+                            <div class="social-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="social-icon"><i class="fab fa-linkedin"></i></div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+
+            <!-- Mentors -->
+            <div class="team-section">
+                <h2 class="section-title">VICE PRESIDENT</h2>
+                <div class="team-grid">
+                    <div class="member-card">
+                        <div class="member-photo">
+                            <img src="team/kk1.png" alt="Mukul Fajdar">
+                        </div>
+                        <h3 class="member-name">Krupa Bawankar</h3>
+                        <p class="member-role"></p>
+                        <div class="social-links">
+                            <div class="social-icon"><i class="fab fa-instagram"></i></div>
+                            <div class="social-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="social-icon"><i class="fab fa-linkedin"></i></div>
+                        </div>
+                    </div>
+                    <div class="member-card">
+                        <div class="member-photo">
+                            <img src="team/darshan.png" alt="Pranav Bhende">
+                        </div>
+                        <h3 class="member-name">Krupa Kathane</h3>
+                        <p class="member-role"></p>
+                        <div class="social-links">
+                            <div class="social-icon"><i class="fab fa-instagram"></i></div>
+                            <div class="social-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="social-icon"><i class="fab fa-linkedin"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Website Developers -->
+            <div class="team-section">
+                <h2 class="section-title">NEWSLETTER HEAD</h2>
+                <div class="team-grid">
+                    <div class="member-card">
+                        <div class="member-photo">
+                            <img src="team/priya.png" alt="Vedant Ghujade">
+                        </div>
+                        <h3 class="member-name">Priya Bhende</h3>
+                        <p class="member-role"></p>
+                        <div class="social-links">
+                            <div class="social-icon"><i class="fab fa-instagram"></i></div>
+                            <div class="social-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="social-icon"><i class="fab fa-linkedin"></i></div>
+                        </div>
+                    </div>
+                    <div class="member-card">
+                        <div class="member-photo">
+                            <img src="team/tanvi.png" alt="Divyansh Bhersat">
+                        </div>
+                        <h3 class="member-name">Tanvi Pardake</h3>
+                        <p class="member-role"></p>
+                        <div class="social-links">
+                            <div class="social-icon"><i class="fab fa-instagram"></i></div>
+                            <div class="social-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="social-icon"><i class="fab fa-linkedin"></i></div>
+                        </div>
+                    </div>
+                  
+                   
+                </div>
+            </div>
+                       <!-- Website Developers -->
+            <div class="team-section">
+                <h2 class="section-title">WALL MAGAZINE HEAD</h2>
+                <div class="team-grid">
+                    <div class="member-card">
+                        <div class="member-photo">
+                            <img src="team/yash1.png" alt="Vedant Ghujade">
+                        </div>
+                        <h3 class="member-name">Yash Gayakwad</h3>
+                        <p class="member-role"></p>
+                        <div class="social-links">
+                            <div class="social-icon"><i class="fab fa-instagram"></i></div>
+                            <div class="social-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="social-icon"><i class="fab fa-linkedin"></i></div>
+                        </div>
+                    </div>
+                    <div class="member-card">
+                        <div class="member-photo">
+                            <img src="team/utkk.png" alt="Divyansh Bhersat">
+                        </div>
+                        <h3 class="member-name">Utkarsha Narwade</h3>
+                        <p class="member-role"></p>
+                        <div class="social-links">
+                            <div class="social-icon"><i class="fab fa-instagram"></i></div>
+                            <div class="social-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="social-icon"><i class="fab fa-linkedin"></i></div>
+                        </div>
+                    </div>
+                    <div class="member-card">
+                        <div class="member-photo">
+                            <img src="team/m1.png" alt="Nikita Bhubhaner">
+                        </div>
+                        <h3 class="member-name">Mohini Khamankar</h3>
+                        <p class="member-role"></p>
+                        <div class="social-links">
+                            <div class="social-icon"><i class="fab fa-instagram"></i></div>
+                            <div class="social-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="social-icon"><i class="fab fa-linkedin"></i></div>
+                        </div>
+                    </div>
+                 
+                   
+                </div>
+            </div>
+                    <!-- Website Developers -->
+            <div class="team-section">
+                <h2 class="section-title">CREATIVE HEAD</h2>
+                <div class="team-grid">
+                    <div class="member-card">
+                        <div class="member-photo">
+                            <img src="team/a1.png" alt="Vedant Ghujade">
+                        </div>
+                        <h3 class="member-name">Ashlesh Sorte</h3>
+                        <p class="member-role"></p>
+                        <div class="social-links">
+                            <div class="social-icon"><i class="fab fa-instagram"></i></div>
+                            <div class="social-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="social-icon"><i class="fab fa-linkedin"></i></div>
+                        </div>
+                    </div>
+                   
+                   
+                </div>
+            </div>
+             <!-- Website Developers -->
+            <div class="team-section">
+                <h2 class="section-title">EVENT MANAGEMENT HEAD</h2>
+                <div class="team-grid">
+                    <div class="member-card">
+                        <div class="member-photo">
+                            <img src="team/sis1.png" alt="Vedant Ghujade">
+                        </div>
+                        <h3 class="member-name">Sharayu Gawande</h3>
+                        <p class="member-role"></p>
+                        <div class="social-links">
+                            <div class="social-icon"><i class="fab fa-instagram"></i></div>
+                            <div class="social-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="social-icon"><i class="fab fa-linkedin"></i></div>
+                        </div>
+                    </div>
+                   
+                    <div class="member-card">
+                        <div class="member-photo">
+                            <img src="team/ved.png" alt="Nikita Bhubhaner">
+                        </div>
+                        <h3 class="member-name">Vedika Dalal</h3>
+                        <p class="member-role"></p>
+                        <div class="social-links">
+                            <div class="social-icon"><i class="fab fa-instagram"></i></div>
+                            <div class="social-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="social-icon"><i class="fab fa-linkedin"></i></div>
+                        </div>
+                    </div>
+                    <div class="member-card">
+                        <div class="member-photo">
+                            <img src="team/trupti.png" alt="Dhanshri Wanjari">
+                        </div>
+                        <h3 class="member-name">Trupti Darwehkar</h3>
+                        <p class="member-role"></p>
+                        <div class="social-links">
+                            <div class="social-icon"><i class="fab fa-instagram"></i></div>
+                            <div class="social-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="social-icon"><i class="fab fa-linkedin"></i></div>
+                        </div>
+                    </div>
+<center>
+                          <div class="member-card">
+                        <div class="member-photo">
+                            <img src="team/y3.png" alt="Dhanshri Wanjari">
+                        </div>
+                        <h3 class="member-name">Yadnesh Pawar</h3>
+                        <p class="member-role"></p>
+                        <div class="social-links">
+                            <div class="social-icon"><i class="fab fa-instagram"></i></div>
+                            <div class="social-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="social-icon"><i class="fab fa-linkedin"></i></div>
+                        </div>
+                    </div></center>
+
+                  
+                   
+                </div>
+            </div>
+             <!-- Website Developers -->
+            <div class="team-section">
+                <h2 class="section-title">HARDWARE MAINTANANCE CLUB HEAD</h2>
+                <div class="team-grid">
+                    <div class="member-card">
+                        <div class="member-photo">
+                            <img src="team/gaur.png" alt="Vedant Ghujade">
+                        </div>
+                        <h3 class="member-name">Gaurav Panhalkar</h3>
+                        <p class="member-role"></p>
+                        <div class="social-links">
+                            <div class="social-icon"><i class="fab fa-instagram"></i></div>
+                            <div class="social-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="social-icon"><i class="fab fa-linkedin"></i></div>
+                        </div>
+                    </div>
+                   
+                   
+                </div>
+            </div>
+             <!-- Website Developers -->
+            <div class="team-section">
+                <h2 class="section-title">CODE CATALYST HEAD</h2>
+                <div class="team-grid">
+                    <div class="member-card">
+                        <div class="member-photo">
+                            <img src="team/snehal.png" alt="Vedant Ghujade">
+                        </div>
+                        <h3 class="member-name">Snehal Kadam</h3>
+                        <p class="member-role"></p>
+                        <div class="social-links">
+                            <div class="social-icon"><i class="fab fa-instagram"></i></div>
+                            <div class="social-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="social-icon"><i class="fab fa-linkedin"></i></div>
+                        </div>
+                    </div>
+                    <div class="member-card">
+                        <div class="member-photo">
+                            <img src="team/shru.png" alt="Divyansh Bhersat">
+                        </div>
+                        <h3 class="member-name">Shruti Rane</h3>
+                        <p class="member-role"></p>
+                        <div class="social-links">
+                            <div class="social-icon"><i class="fab fa-instagram"></i></div>
+                            <div class="social-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="social-icon"><i class="fab fa-linkedin"></i></div>
+                        </div>
+                    </div>
+                    <div class="member-card">
+                        <div class="member-photo">
+                            <img src="team/pg.png" alt="Nikita Bhubhaner">
+                        </div>
+                        <h3 class="member-name">Pranav Gayki</h3>
+                        <p class="member-role"></p>
+                        <div class="social-links">
+                            <div class="social-icon"><i class="fab fa-instagram"></i></div>
+                            <div class="social-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="social-icon"><i class="fab fa-linkedin"></i></div>
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        // Generate Moving Stars
+        function createStars() {
+            const starsLayer = document.getElementById('starsLayer');
+            const numberOfStars = 100;
+
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * -50 + '%';
+                
+                const xMove = (Math.random() - 0.5) * 200;
+                star.style.setProperty('--x-move', xMove + 'px');
+                
+                const duration = Math.random() * 15 + 10;
+                star.style.animationDuration = duration + 's';
+                star.style.animationDelay = Math.random() * 5 + 's';
+                
+                starsLayer.appendChild(star);
+            }
+        }
+
+        // Initialize
+        createStars();
+    </script>
+</body>
+</html>
+                         
