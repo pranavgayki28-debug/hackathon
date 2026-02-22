@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COSA - Problem Analysis</title>
+    <title>COSA - Hackathon</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1103,7 +1103,7 @@
                 <div class="logo-ring">
                     <div class="logo-inner">C</div>
                 </div>
-                <div class="logo-text">COSA</div>
+                <div class="logo-text">CampusConnect</div>
             </div>
             <div class="main-nav">
                 <a href="event.html">EVENTS</a>
@@ -1422,80 +1422,43 @@
         </div>
     </div>
 
-    <script>
-        // Generate Moving Stars
-        function createStars() {
-            const starsLayer = document.getElementById('starsLayer');
-            const numberOfStars = 150;
+<script>
+    // Star Generation
+    const starsLayer = document.getElementById('starsLayer');
+    for (let i = 0; i < 150; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        const xMove = (Math.random() - 0.5) * 200;
+        star.style.setProperty('--x-move', `${xMove}px`);
+        star.style.left = `${Math.random() * 100}%`;
+        star.style.top = `${Math.random() * 100}%`;
+        star.style.width = star.style.height = `${Math.random() * 3}px`;
+        star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+        star.style.animationDelay = `${Math.random() * 5}s`;
+        starsLayer.appendChild(star);
+    }
 
-            for (let i = 0; i < numberOfStars; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                
-                const size = Math.random() * 3 + 1;
-                star.style.width = size + 'px';
-                star.style.height = size + 'px';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * -50 + '%';
-                
-                const xMove = (Math.random() - 0.5) * 200;
-                star.style.setProperty('--x-move', xMove + 'px');
-                
-                const duration = Math.random() * 15 + 10;
-                star.style.animationDuration = duration + 's';
-                star.style.animationDelay = Math.random() * 5 + 's';
-                
-                starsLayer.appendChild(star);
-            }
-        }
+    // Tab Switching Logic
+    const tabs = document.querySelectorAll('.tab');
+    const contents = document.querySelectorAll('.tab-content');
 
-        // FAQ Toggle
-        const faqItems = document.querySelectorAll('.faq-item');
-        faqItems.forEach(item => {
-            const question = item.querySelector('.faq-question');
-            question.addEventListener('click', () => {
-                const isActive = item.classList.contains('active');
-                
-                // Close all FAQs
-                faqItems.forEach(faq => faq.classList.remove('active'));
-                
-                // Open clicked FAQ if it wasn't active
-                if (!isActive) {
-                    item.classList.add('active');
-                }
-            });
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const target = tab.getAttribute('data-tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            contents.forEach(c => c.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById(target).classList.add('active');
         });
+    });
 
-        // Tab switching
-       // Tab switching
-        const tabs = document.querySelectorAll('.tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-        
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const targetTab = tab.getAttribute('data-tab');
-                
-                // Remove active class from all tabs
-                tabs.forEach(t => t.classList.remove('active'));
-                
-                // Add active class to clicked tab
-                tab.classList.add('active');
-                
-                // Hide all tab contents
-                tabContents.forEach(content => {
-                    content.classList.remove('active');
-                });
-                
-                // Show the target tab content
-                const targetContent = document.querySelector(`.tab-content[data-content="${targetTab}"]`);
-                if (targetContent) {
-                    targetContent.classList.add('active');
-                }
-            });
+    // FAQ Accordion Logic
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+        item.querySelector('.faq-question').addEventListener('click', () => {
+            item.classList.toggle('active');
         });
-
-        // Initialize
-        createStars();
-    </script>
+    });
+</script>
 </body>
 </html>
